@@ -1,0 +1,55 @@
+=== Grafana /api/health ===
+{
+  "database": "ok",
+  "version": "13.0.1+security-01",
+  "commit": "9bbe672d"
+}
+
+=== Grafana /api/datasources (admin auth) ===
+[
+    {
+        "id": 2,
+        "uid": "alertmanager",
+        "orgId": 1,
+        "name": "Alertmanager",
+        "type": "alertmanager",
+        "typeName": "Alertmanager",
+        "typeLogoUrl": "public/plugins/alertmanager/img/logo.svg",
+        "access": "proxy",
+        "url": "http://kps-alertmanager.observability:9093/",
+        "user": "",
+        "database": "",
+        "basicAuth": false,
+        "isDefault": false,
+        "jsonData": {
+            "handleGrafanaManagedAlerts": false,
+            "implementation": "prometheus"
+        },
+        "readOnly": true
+    },
+    {
+        "id": 1,
+        "uid": "prometheus",
+        "orgId": 1,
+        "name": "Prometheus",
+        "type": "prometheus",
+        "typeName": "Prometheus",
+        "typeLogoUrl": "public/plugins/prometheus/img/prometheus_logo.svg",
+        "access": "proxy",
+        "url": "http://kps-prometheus.observability:9090/",
+        "user": "",
+        "database": "",
+        "basicAuth": false,
+        "isDefault": true,
+        "jsonData": {
+            "httpMethod": "POST",
+            "timeInterval": "30s"
+        },
+        "readOnly": true
+    }
+]
+
+# Captured via:
+#   kubectl -n observability port-forward svc/kps-grafana 3000:80
+#   curl -fsSL http://localhost:3000/api/health
+#   curl -fsSL -u admin:payeye-demo http://localhost:3000/api/datasources
