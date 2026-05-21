@@ -25,8 +25,8 @@ metadata:
     istio.io/dataplane-mode: ambient        # opt into Istio Ambient mTLS
     pod-security.kubernetes.io/enforce: <profile>
     pod-security.kubernetes.io/enforce-version: latest
-    payeye.io/data-classification: <public|internal|confidential|pci>
-    payeye.io/owner: <team-name>
+    biopay.io/data-classification: <public|internal|confidential|pci>
+    biopay.io/owner: <team-name>
 ```
 
 ## Why ambient mode

@@ -5,7 +5,7 @@
 variable "project_name" {
   description = "Short identifier used as a prefix on every VPC-scoped resource name."
   type        = string
-  default     = "payeye"
+  default     = "biopay"
 
   validation {
     condition     = can(regex("^[a-z0-9-]{2,20}$", var.project_name))

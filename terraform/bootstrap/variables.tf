@@ -8,7 +8,7 @@
 variable "project_name" {
   description = "Short, lowercase identifier used as a prefix on every bootstrap resource name. Must be unique across the AWS partition because S3 bucket names are global."
   type        = string
-  default     = "payeye"
+  default     = "biopay"
 
   validation {
     condition     = can(regex("^[a-z0-9-]{2,20}$", var.project_name))
@@ -48,7 +48,7 @@ variable "log_bucket_name" {
 variable "dynamodb_table_name" {
   description = "Name of the DynamoDB lock table that serializes concurrent `terraform apply` runs across all environments using this backend."
   type        = string
-  default     = "payeye-tfstate-locks"
+  default     = "biopay-tfstate-locks"
 
   validation {
     condition     = can(regex("^[a-zA-Z0-9_.-]{3,255}$", var.dynamodb_table_name))
@@ -59,11 +59,11 @@ variable "dynamodb_table_name" {
 variable "kms_alias" {
   description = "KMS alias for the customer-managed key encrypting the state bucket. Must start with 'alias/'."
   type        = string
-  default     = "alias/payeye-tfstate"
+  default     = "alias/biopay-tfstate"
 
   validation {
     condition     = startswith(var.kms_alias, "alias/")
-    error_message = "kms_alias must start with 'alias/' (e.g. 'alias/payeye-tfstate')."
+    error_message = "kms_alias must start with 'alias/' (e.g. 'alias/biopay-tfstate')."
   }
 }
 

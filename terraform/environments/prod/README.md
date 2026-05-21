@@ -9,12 +9,12 @@
 # backend.tf (committed)
 terraform {
   backend "s3" {
-    bucket         = "payeye-tfstate-<account-id>"
+    bucket         = "biopay-tfstate-<account-id>"
     key            = "prod/terraform.tfstate"
     region         = "eu-central-1"
-    dynamodb_table = "payeye-tfstate-locks"
+    dynamodb_table = "biopay-tfstate-locks"
     encrypt        = true
-    kms_key_id     = "alias/payeye-tfstate"
+    kms_key_id     = "alias/biopay-tfstate"
   }
 }
 ```

@@ -6,7 +6,7 @@
 #
 #   1. Every connection between two pods in any ambient-labeled namespace is
 #      automatically wrapped in mTLS using each pod's SPIFFE identity:
-#         spiffe://payeye.local/ns/<namespace>/sa/<serviceaccount>
+#         spiffe://biopay.local/ns/<namespace>/sa/<serviceaccount>
 #
 #   2. Any plaintext (non-mTLS) traffic from outside the mesh into an
 #      ambient-labeled pod is refused.

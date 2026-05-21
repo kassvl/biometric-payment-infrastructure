@@ -4,7 +4,7 @@
 # In normal use, the environment composition supplies these values.
 # =============================================================================
 
-project_name = "payeye"
+project_name = "biopay"
 env          = "dev"
 
 # ----- VPC inputs (fed from module.vpc.* outputs in the env composition) -----

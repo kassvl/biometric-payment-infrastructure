@@ -40,7 +40,7 @@ EKS cluster.
 Identities are SPIFFE IDs derived from each pod's Kubernetes ServiceAccount:
 
 ```
-spiffe://payeye.local/ns/<namespace>/sa/<serviceaccount>
+spiffe://biopay.local/ns/<namespace>/sa/<serviceaccount>
 ```
 
 `AuthorizationPolicy` uses these identities, not IPs or pod names. The
@@ -167,7 +167,7 @@ böyle olmalı zaten.
 
 Bunlar **L7 özellikleri**dir, ambient mode bunları **waypoint proxy**
 arkasına alır. Bir namespace'in L7'ye ihtiyacı varsa (örneğin
-"GET /payments/* sadece JWT iss=auth.payeye.com tarafından imzalı
+"GET /payments/* sadece JWT iss=auth.biopay.com tarafından imzalı
 token ile") o namespace için bir Gateway resource ile waypoint deploy
 edilir; istiod ona Envoy config gönderir. L7 trafiği ztunnel → waypoint
 → ztunnel → hedef pod yolunu izler. L4 yeten servislere (örn:

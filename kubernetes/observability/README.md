@@ -51,7 +51,7 @@ Idempotent — re-running upgrades to the latest chart version per `helm upgrade
 ## Access (dev)
 
 ```bash
-# Grafana — admin / payeye-demo
+# Grafana — admin / biopay-demo
 kubectl -n observability port-forward svc/kps-grafana 3000:80
 open http://localhost:3000
 

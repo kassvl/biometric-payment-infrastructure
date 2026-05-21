@@ -3,7 +3,7 @@
 # Copy to terraform.tfvars (gitignored) when iterating locally.
 # =============================================================================
 
-project_name = "payeye"
+project_name = "biopay"
 env          = "dev"
 
 cidr_block = "10.0.0.0/16"

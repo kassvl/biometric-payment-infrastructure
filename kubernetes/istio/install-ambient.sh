@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # =============================================================================
-# Install Istio Ambient mesh on the PayEye dev cluster.
+# Install Istio Ambient mesh on the Biopay dev cluster.
 #
 # Architecture:
 #   - istiod          (control plane, single Deployment in istio-system)

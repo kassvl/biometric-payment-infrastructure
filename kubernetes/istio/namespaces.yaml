@@ -12,7 +12,7 @@
 #   2. kubectl apply -f namespaces.yaml         (this file - opts namespaces in)
 #   3. Restart workloads in those namespaces so traffic gets intercepted.
 #
-# In a real PayEye deployment, the labels would be:
+# In a real Biopay deployment, the labels would be:
 #   - payments         (PCI-DSS scope, ambient + waypoint for L7 authz)
 #   - biometrics       (ambient + waypoint, talks to payments + KMS only)
 #   - auth             (ambient + waypoint, JWT issuer)
@@ -26,5 +26,5 @@ metadata:
   name: default
   labels:
     istio.io/dataplane-mode: ambient
-    payeye.io/data-classification: confidential
-    payeye.io/owner: platform-team
+    biopay.io/data-classification: confidential
+    biopay.io/owner: platform-team

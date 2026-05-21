@@ -17,15 +17,15 @@ GitHub OIDC Provider  ──► IAM trust policy: token.actions.githubuserconten
                                             └── sub: repo:kassvl/biometric-payment-infrastructure:ref:refs/heads/main
                                             └── aud: sts.amazonaws.com
                                   ▼
-                         IAM Role: payeye-ci-<env>
+                         IAM Role: biopay-ci-<env>
                                   ▼
                          scoped to the modules its env owns
 ```
 
 Two roles, separated by privilege:
 
-- `payeye-ci-plan-only` — `terraform plan` permissions; read-only on most resources.
-- `payeye-ci-apply-<env>` — `terraform apply` permissions; assumed only by `terraform-apply.yml` after approval.
+- `biopay-ci-plan-only` — `terraform plan` permissions; read-only on most resources.
+- `biopay-ci-apply-<env>` — `terraform apply` permissions; assumed only by `terraform-apply.yml` after approval.
 
 ## Branch protections (configured at the GitHub side, mirrored here for awareness)
 

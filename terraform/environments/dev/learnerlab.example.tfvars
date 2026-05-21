@@ -20,7 +20,7 @@
 # Look up your Lab account ID with: aws sts get-caller-identity --query Account --output text
 # Then replace 339713122678 below with your value.
 
-project_name = "payeye"
+project_name = "biopay"
 env          = "dev"
 region       = "us-east-1"
 

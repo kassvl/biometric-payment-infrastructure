@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # =============================================================================
 # Install the observability stack (kube-prometheus-stack + loki-stack) onto
-# a freshly applied PayEye dev cluster.
+# a freshly applied Biopay dev cluster.
 #
 # Usage:
 #   $(terraform -chdir=../../terraform/environments/dev output -raw eks_kubeconfig_command)
@@ -57,7 +57,7 @@ kubectl -n "${NS}" get pods
 echo
 echo "=== access Grafana locally ==="
 echo "  kubectl -n ${NS} port-forward svc/kps-grafana 3000:80"
-echo "  open http://localhost:3000  (admin / payeye-demo)"
+echo "  open http://localhost:3000  (admin / biopay-demo)"
 echo
 echo "=== access Prometheus locally ==="
 echo "  kubectl -n ${NS} port-forward svc/kps-prometheus 9090:9090"

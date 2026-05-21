@@ -8,7 +8,7 @@
 # First-time init (after bootstrap apply):
 #
 #   ACCOUNT=$(aws sts get-caller-identity --query Account --output text)
-#   terraform init -backend-config="bucket=payeye-tfstate-${ACCOUNT}"
+#   terraform init -backend-config="bucket=biopay-tfstate-${ACCOUNT}"
 #
 # Subsequent inits remember the bucket from .terraform/terraform.tfstate.
 # =============================================================================
@@ -27,8 +27,8 @@ terraform {
     # bucket is supplied via `-backend-config` at init; see header.
     key            = "dev/terraform.tfstate"
     region         = "eu-central-1"
-    dynamodb_table = "payeye-tfstate-locks"
+    dynamodb_table = "biopay-tfstate-locks"
     encrypt        = true
-    kms_key_id     = "alias/payeye-tfstate"
+    kms_key_id     = "alias/biopay-tfstate"
   }
 }

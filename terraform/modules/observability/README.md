@@ -8,11 +8,11 @@
 
 | Resource                         | Detail                                                                                          |
 | -------------------------------- | ----------------------------------------------------------------------------------------------- |
-| CloudWatch log groups            | `/payeye/<env>/eks/cluster`, `/payeye/<env>/vpc/flowlogs`, `/payeye/<env>/waf`, etc. KMS-encrypted, retention per env policy. |
+| CloudWatch log groups            | `/biopay/<env>/eks/cluster`, `/biopay/<env>/vpc/flowlogs`, `/biopay/<env>/waf`, etc. KMS-encrypted, retention per env policy. |
 | CloudWatch metric filters        | Extract custom metrics from logs (4xx rate, auth failures, slow DB queries).                    |
 | CloudWatch dashboards            | Per-environment: cluster health, RDS performance, WAF blocks, GuardDuty findings.               |
 | CloudWatch alarms                | Tied to the dashboards; route to SNS for paging / Slack / email.                                |
-| SNS topics                       | `payeye-<env>-page` (critical), `payeye-<env>-notify` (warning/info), with KMS encryption.      |
+| SNS topics                       | `biopay-<env>-page` (critical), `biopay-<env>-notify` (warning/info), with KMS encryption.      |
 | EventBridge rules (optional)     | Fan-out: GuardDuty Finding → SecurityHub + SNS + Lambda triage stub.                            |
 | S3 bucket — long-term log archive | Logs older than CloudWatch retention land here in Glacier IR for the 7-year FinTech audit window. |
 

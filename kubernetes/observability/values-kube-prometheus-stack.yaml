@@ -1,5 +1,5 @@
 # =============================================================================
-# kube-prometheus-stack values for the PayEye dev cluster.
+# kube-prometheus-stack values for the Biopay dev cluster.
 #
 # Lean settings for a portfolio demo on 2x t3.medium nodes (~6 GiB total
 # pod RAM available). For prod, raise retention, switch storage to gp3
@@ -20,7 +20,7 @@ alertmanager:
 # -----------------------------------------------------------------------------
 grafana:
   enabled: true
-  adminPassword: "payeye-demo"
+  adminPassword: "biopay-demo"
   service:
     type: ClusterIP
   resources:

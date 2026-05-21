@@ -123,9 +123,9 @@ Capture the values from `terraform output`:
 
 ```bash
 ACCOUNT=$(aws sts get-caller-identity --query Account --output text)
-echo "State bucket: payeye-tfstate-${ACCOUNT}"
-echo "Lock table:   payeye-tfstate-locks"
-echo "KMS alias:    alias/payeye-tfstate"
+echo "State bucket: biopay-tfstate-${ACCOUNT}"
+echo "Lock table:   biopay-tfstate-locks"
+echo "KMS alias:    alias/biopay-tfstate"
 ```
 
 ### 2. Initialize the dev backend
@@ -139,7 +139,7 @@ cd ../environments/dev
 
 ACCOUNT=$(aws sts get-caller-identity --query Account --output text)
 terraform init \
-  -backend-config="bucket=payeye-tfstate-${ACCOUNT}"
+  -backend-config="bucket=biopay-tfstate-${ACCOUNT}"
 ```
 
 Subsequent `terraform init` runs remember the bucket from
@@ -163,7 +163,7 @@ plane log group + 1 launch template + 1 node group + 4 EKS addons.
 If the count is materially different, stop and read the plan output. Common
 deltas: forgot to set `enable_vpc_endpoints = false` (adds 22 resources),
 or the bootstrap KMS key isn't found (your `versions.tf` references
-`alias/payeye-tfstate` — confirm it exists).
+`alias/biopay-tfstate` — confirm it exists).
 
 ### 4. Apply
 
@@ -178,7 +178,7 @@ First apply takes 15–20 minutes — the EKS cluster + node group is the slow p
 ```bash
 # VPC visible
 aws ec2 describe-vpcs \
-  --filters "Name=tag:Project,Values=payeye" \
+  --filters "Name=tag:Project,Values=biopay" \
   --query 'Vpcs[].{ID:VpcId,CIDR:CidrBlock,Tags:Tags[?Key==`Name`].Value|[0]}' \
   --output table
 
@@ -187,7 +187,7 @@ terraform output -json kms_key_aliases | jq
 
 # WAF WebACL
 aws wafv2 list-web-acls --scope REGIONAL \
-  --query 'WebACLs[?starts_with(Name, `payeye-`)]' \
+  --query 'WebACLs[?starts_with(Name, `biopay-`)]' \
   --output table
 
 # Account password policy
@@ -311,7 +311,7 @@ terraform init
 terraform apply -var "region=us-east-1"
 ```
 
-Three to four minutes. State bucket is now `payeye-tfstate-<lab-account-id>`
+Three to four minutes. State bucket is now `biopay-tfstate-<lab-account-id>`
 in `us-east-1`.
 
 ### 4. Wire up the dev composition for the Lab
@@ -330,7 +330,7 @@ rm learnerlab.tfvars.bak
 
 # The dev backend versions.tf hard-codes region eu-central-1 — override at init.
 terraform init -reconfigure \
-  -backend-config="bucket=payeye-tfstate-${ACCT}" \
+  -backend-config="bucket=biopay-tfstate-${ACCT}" \
   -backend-config="region=us-east-1"
 ```
 

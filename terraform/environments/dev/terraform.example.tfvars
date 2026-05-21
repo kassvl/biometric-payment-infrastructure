@@ -6,7 +6,7 @@
 # dev is the ONLY environment in the account.
 # =============================================================================
 
-# project_name = "payeye"
+# project_name = "biopay"
 # env          = "dev"
 # region       = "eu-central-1"
 

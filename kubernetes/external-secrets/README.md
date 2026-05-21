@@ -18,11 +18,11 @@ External Secrets Operator (ESO) configuration. ESO is the bridge between
 
 ```
 ServiceAccount (eso-controller)
-    │   annotation: eks.amazonaws.com/role-arn = arn:aws:iam::<acct>:role/payeye-eso
+    │   annotation: eks.amazonaws.com/role-arn = arn:aws:iam::<acct>:role/biopay-eso
     ▼
-IAM Role (payeye-eso)
+IAM Role (biopay-eso)
     │   trust:    sts:AssumeRoleWithWebIdentity from cluster OIDC issuer
-    │   policy:   secretsmanager:GetSecretValue on arn:aws:secretsmanager:...:secret:payeye/<env>/*
+    │   policy:   secretsmanager:GetSecretValue on arn:aws:secretsmanager:...:secret:biopay/<env>/*
     ▼
 AWS Secrets Manager
 ```

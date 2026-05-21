@@ -24,8 +24,8 @@ Environment compositions. Each subdirectory is a Terraform **root module** that:
 Each environment has its own S3 state key:
 
 ```
-s3://payeye-tfstate-<account-id>/<env>/terraform.tfstate
+s3://biopay-tfstate-<account-id>/<env>/terraform.tfstate
 ```
 
 State files are versioned and encrypted with the KMS CMK created in `terraform/bootstrap/`.
-DynamoDB locking is on the shared `payeye-tfstate-locks` table.
+DynamoDB locking is on the shared `biopay-tfstate-locks` table.

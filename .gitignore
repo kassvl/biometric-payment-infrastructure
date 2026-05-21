@@ -1,5 +1,5 @@
 # =============================================================================
-# PayEye Secure Infrastructure - .gitignore
+# Biopay Secure Infrastructure - .gitignore
 # Goal: prevent accidental commit of state, secrets, and machine-local artifacts.
 # Anything matching these patterns must NEVER reach the remote repository.
 # =============================================================================

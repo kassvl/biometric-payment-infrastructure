@@ -5,7 +5,7 @@
 # use, the environment composition supplies these values.
 # =============================================================================
 
-project_name = "payeye"
+project_name = "biopay"
 env          = "dev"
 
 cluster_version = "1.30"

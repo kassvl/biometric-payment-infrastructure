@@ -60,7 +60,7 @@ module "security" {
 module "eks" {
   source = "../../modules/eks"
 
-  project_name = "payeye"
+  project_name = "biopay"
   env          = "dev"
 
   cluster_version          = "1.30"
@@ -103,7 +103,7 @@ After `terraform apply`:
 ```bash
 # Update local kubeconfig
 $(terraform output -raw kubeconfig_command)
-# (or run: aws eks update-kubeconfig --region eu-central-1 --name payeye-dev-eks)
+# (or run: aws eks update-kubeconfig --region eu-central-1 --name biopay-dev-eks)
 
 kubectl get nodes
 kubectl get pods -n kube-system

@@ -10,7 +10,7 @@
 variable "project_name" {
   description = "Short identifier propagated through every module."
   type        = string
-  default     = "payeye"
+  default     = "biopay"
 }
 
 variable "env" {

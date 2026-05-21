@@ -13,7 +13,7 @@
 | Resource                     | Purpose                                                                                  |
 | ---------------------------- | ---------------------------------------------------------------------------------------- |
 | `aws_kms_key.tfstate`        | Customer-managed key (CMK) for state encryption at rest. Annual rotation enabled.        |
-| `aws_kms_alias.tfstate`      | Stable, human-readable alias (`alias/payeye-tfstate`) for the CMK.                       |
+| `aws_kms_alias.tfstate`      | Stable, human-readable alias (`alias/biopay-tfstate`) for the CMK.                       |
 | `aws_s3_bucket.logs`         | Access log bucket — receives S3 server access logs from the state bucket.                |
 | `aws_s3_bucket.tfstate`      | Versioned, KMS-encrypted bucket holding remote Terraform state.                          |
 | `aws_dynamodb_table.tfstate_lock` | Lock table — serializes concurrent `terraform apply` runs. PITR + KMS-encrypted.    |
@@ -61,12 +61,12 @@ After apply, every downstream environment gets a `backend.tf` like:
 ```hcl
 terraform {
   backend "s3" {
-    bucket         = "payeye-tfstate-<account-id>"
+    bucket         = "biopay-tfstate-<account-id>"
     key            = "dev/terraform.tfstate"
     region         = "eu-central-1"
-    dynamodb_table = "payeye-tfstate-locks"
+    dynamodb_table = "biopay-tfstate-locks"
     encrypt        = true
-    kms_key_id     = "alias/payeye-tfstate"
+    kms_key_id     = "alias/biopay-tfstate"
   }
 }
 ```
@@ -84,7 +84,7 @@ This is a "self-host the state" move; not required, but tidy.
 #     region         = "eu-central-1"
 #     dynamodb_table = "<from terraform output dynamodb_table_name>"
 #     encrypt        = true
-#     kms_key_id     = "alias/payeye-tfstate"
+#     kms_key_id     = "alias/biopay-tfstate"
 #   }
 
 terraform init -migrate-state

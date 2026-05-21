@@ -108,7 +108,7 @@ module "vpc" {
 module "security" {
   source = "../../modules/security"
 
-  project_name = "payeye"
+  project_name = "biopay"
   env          = "dev"
 
   # VPC wiring (only required when enable_vpc_endpoints = true)

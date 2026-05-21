@@ -7,9 +7,9 @@
 
 | Resource                       | Detail                                                                                            |
 | ------------------------------ | ------------------------------------------------------------------------------------------------- |
-| Route 53 hosted zone (public)  | Apex zone (e.g., `payeye.example`), with health checks for active-passive failover to DR region.  |
-| Route 53 hosted zone (private) | Internal-only zone (`internal.payeye.example`) attached to the VPC for service discovery.         |
-| ACM certificate                | **Wildcard** cert (`*.payeye.example`) issued in eu-central-1 for the regional ALB.               |
+| Route 53 hosted zone (public)  | Apex zone (e.g., `biopay.example`), with health checks for active-passive failover to DR region.  |
+| Route 53 hosted zone (private) | Internal-only zone (`internal.biopay.example`) attached to the VPC for service discovery.         |
+| ACM certificate                | **Wildcard** cert (`*.biopay.example`) issued in eu-central-1 for the regional ALB.               |
 | ACM cert (us-east-1, optional) | If we add CloudFront later, certs for global edges must live in `us-east-1`.                      |
 | DNS validation records         | Auto-created in Route 53 to validate cert issuance — fully automated renewal.                     |
 | Health checks                  | Endpoint health checks tied to alarm + Route 53 failover routing policy.                          |
@@ -24,7 +24,7 @@
 ## Failover model
 
 ```
-Customer ─► payeye.example (Route 53, failover routing)
+Customer ─► biopay.example (Route 53, failover routing)
               ├─ Primary  : eu-central-1 ALB  (health check OK)
               └─ Secondary: eu-west-1   ALB  (warm standby in DR)
 ```

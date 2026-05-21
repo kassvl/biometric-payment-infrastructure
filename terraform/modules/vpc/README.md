@@ -23,7 +23,7 @@
 | `aws_route_table.private_app[*]` | **One private-app RT per AZ.** `0.0.0.0/0 → AZ-local NAT GW` (or shared NAT in single-NAT mode).      |
 | `aws_route_table.private_db[*]`  | **One private-db RT per AZ.** Local VPC traffic only — no internet route.                              |
 | Route table associations         | Every subnet associated to its tier's RT.                                                              |
-| `aws_cloudwatch_log_group.flow_logs` | `/payeye/<env>/vpc/flowlogs`, configurable retention, optional KMS-CMK encryption.                |
+| `aws_cloudwatch_log_group.flow_logs` | `/biopay/<env>/vpc/flowlogs`, configurable retention, optional KMS-CMK encryption.                |
 | `aws_iam_role.flow_logs`         | Trust policy scoped to `vpc-flow-logs.amazonaws.com` with `aws:SourceAccount` + `aws:SourceArn` guards. |
 | `aws_iam_role_policy.flow_logs`  | Least-privilege CloudWatch Logs write to this VPC's log group only.                                    |
 | `aws_flow_log.main`              | Captures **all** traffic by default; 60-second aggregation; ARN-targeted at the log group above.       |
@@ -56,7 +56,7 @@ The module is consumed from a composing environment. Example for `dev`:
 module "vpc" {
   source = "../../modules/vpc"
 
-  project_name = "payeye"
+  project_name = "biopay"
   env          = "dev"
 
   cidr_block = "10.0.0.0/16"

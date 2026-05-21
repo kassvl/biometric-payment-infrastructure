@@ -7,16 +7,16 @@
 # =============================================================================
 
 # Short identifier used as a prefix on every bootstrap resource.
-# project_name = "payeye"
+# project_name = "biopay"
 
 # Primary AWS region.
 # region = "eu-central-1"
 
 # DynamoDB lock table name. Default works for most projects.
-# dynamodb_table_name = "payeye-tfstate-locks"
+# dynamodb_table_name = "biopay-tfstate-locks"
 
 # KMS alias for the state-encryption CMK. Must start with `alias/`.
-# kms_alias = "alias/payeye-tfstate"
+# kms_alias = "alias/biopay-tfstate"
 
 # Number of days to retain noncurrent state versions. Default 365.
 # noncurrent_version_expiration_days = 365

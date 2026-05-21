@@ -7,10 +7,18 @@
 **Cluster**: `payeye-dev-eks`
 **Apply duration**: ~25 minutes (with 2 retries due to Learner Lab IAM constraints)
 
+> **Note on naming**: This apply was captured before the project was
+> renamed from `payeye` to `biopay`. The artifacts below show the original
+> resource names (`payeye-tfstate-...`, `payeye-dev-eks`, etc.) because they
+> are unedited captures of real AWS API responses. Recreating them under the
+> new name would require provisioning the cluster a second time. The repo
+> code and docs use the new `biopay` name; only these historical proof
+> files retain the original.
+
 This directory captures the AWS-side and Kubernetes-side state of the
-PayEye dev environment immediately after `terraform apply` completed
+dev environment immediately after `terraform apply` completed
 successfully. Used as **interview proof** that the infrastructure was
-not just written — it was actually provisioned and verified.
+not just written, it was actually provisioned and verified.
 
 ## File map
 

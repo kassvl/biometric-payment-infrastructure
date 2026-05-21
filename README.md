@@ -6,22 +6,23 @@
 [![Service Mesh](https://img.shields.io/badge/Mesh-Istio_Ambient-466BB0?logo=istio)](https://istio.io/latest/docs/ambient/)
 [![CI](https://img.shields.io/badge/CI-GitHub_Actions-2088FF?logo=githubactions)](https://github.com/kassvl/biometric-payment-infrastructure/actions)
 [![Security](https://img.shields.io/badge/Scan-Checkov%20%7C%20tfsec%20%7C%20Trivy-success)](#security--compliance)
-[![License](https://img.shields.io/badge/License-Proprietary-lightgrey)](#license)
+[![License](https://img.shields.io/badge/License-MIT-lightgrey)](#license)
 
-> Production-grade AWS infrastructure-as-code for **PayEye**, a Polish FinTech that uses
-> iris + face biometrics for in-store payments. This repository provisions the secure,
-> auditable, and PCI-DSS-aware platform that biometric authentication and payment
-> services run on, modeled after the architectural patterns expected of a regulated
-> European payment processor.
+> Production-grade AWS infrastructure-as-code for a **biometric payment platform** —
+> the kind a regulated European FinTech would run for iris + face authentication
+> and card-adjacent workloads. The repository provisions the secure, auditable,
+> PCI-DSS-aware platform that the application services would sit on, modeled after
+> what a real regulated payment processor needs.
 
 ---
 
 ## 1. Why this project exists
 
-PayEye operates in a **regulated payment-processing space** (PSD2, PCI-DSS, GDPR,
-EU DORA). Running biometric and card-adjacent workloads requires:
+A biometric payment workload sits in a **regulated processing space** (PSD2,
+PCI-DSS, GDPR, EU DORA). Running iris/face matching plus card-adjacent services
+requires:
 
-- Strong **network segmentation** so card-handling pods cannot reach the public internet directly
+- Strong **network segmentation** so payment-handling pods cannot reach the public internet directly
 - **Encryption everywhere**: at rest (KMS), in transit (mTLS via service mesh), in state files
 - **Auditable change pipeline**: nothing reaches production without a reviewed, scanned, plan-approved PR
 - **Identity-bound** access — no long-lived AWS keys inside the cluster
@@ -99,7 +100,7 @@ This repository is the codified version of those requirements.
 ## 4. Repository layout (target)
 
 ```
-payeye-infra/
+biopay-infra/
 ├── terraform/
 │   ├── bootstrap/            # S3 state bucket + DynamoDB lock (chicken-and-egg solver)
 │   ├── modules/
@@ -167,7 +168,7 @@ git clone https://github.com/kassvl/biometric-payment-infrastructure.git
 cd biometric-payment-infrastructure
 
 # Sign in to AWS (SSO recommended; IAM user with MFA acceptable)
-aws sso login --profile payeye-admin
+aws sso login --profile biopay-admin
 
 # Bootstrap remote state (one-time per account)
 cd terraform/bootstrap
@@ -185,10 +186,13 @@ terraform plan
 
 ## 7. License
 
-Proprietary — © PayEye Sp. z o.o. (portfolio replica by [@kassvl](https://github.com/kassvl)).
-This is a **portfolio / educational reproduction** of the architectural patterns a
-real PayEye-class FinTech infrastructure would follow. It is not affiliated with
-PayEye Sp. z o.o. and provisions no production PayEye systems.
+This is a **portfolio / educational project** by [@kassvl](https://github.com/kassvl).
+The repo models the kind of AWS infrastructure a regulated FinTech with biometric
+payment workloads would need: PCI-DSS-aware controls, encrypted everywhere,
+auditable change pipeline, identity-bound IAM. It is not affiliated with any
+existing payment provider and provisions no production systems.
+
+Released under the [MIT License](LICENSE) for the code and architectural ideas.
 
 ---
 
