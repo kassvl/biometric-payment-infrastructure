@@ -1,0 +1,9 @@
+---------------------------------------------------------------
+|                     DescribeLogStreams                      |
++-------------------------------------------------------------+
+|  authenticator-3e524ec558d0877e35fe2e540d87c177             |
+|  authenticator-77f451e25d7d14c7ee3d6b402276dbd1             |
+|  cloud-controller-manager-3e524ec558d0877e35fe2e540d87c177  |
+|  cloud-controller-manager-77f451e25d7d14c7ee3d6b402276dbd1  |
+|  kube-apiserver-3e524ec558d0877e35fe2e540d87c177            |
++-------------------------------------------------------------+

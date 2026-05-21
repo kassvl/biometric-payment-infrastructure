@@ -44,7 +44,8 @@ enable_iam_password_policy    = false
 enable_default_ebs_encryption = false
 
 # ----- Retention / WAF tuning -----
-flow_log_retention_days = 7 # short in lab — credits are finite
+flow_log_retention_days = 7     # short in lab — credits are finite
+enable_flow_logs        = false # Lab blocks iam:CreateRole for the flow-logs service role
 waf_rate_limit_per_5min = 10000
 
 # ----- EKS — Learner Lab specific -----

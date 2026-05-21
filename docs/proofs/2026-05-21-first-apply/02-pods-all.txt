@@ -1,0 +1,12 @@
+=== kubectl get pods -A ===
+NAMESPACE     NAME                                  READY   STATUS    RESTARTS   AGE
+kube-system   aws-node-9vj7m                        2/2     Running   0          4m22s
+kube-system   aws-node-ptrbs                        2/2     Running   0          4m27s
+kube-system   coredns-849f74687b-5gfh7              1/1     Running   0          46m
+kube-system   coredns-849f74687b-xbplg              1/1     Running   0          46m
+kube-system   ebs-csi-controller-7f757ccd95-nsrpp   6/6     Running   0          4m27s
+kube-system   ebs-csi-controller-7f757ccd95-ttttc   6/6     Running   0          4m27s
+kube-system   ebs-csi-node-brbnw                    3/3     Running   0          4m27s
+kube-system   ebs-csi-node-j8wwr                    3/3     Running   0          4m27s
+kube-system   kube-proxy-6f8wq                      1/1     Running   0          5m10s
+kube-system   kube-proxy-t5658                      1/1     Running   0          5m11s

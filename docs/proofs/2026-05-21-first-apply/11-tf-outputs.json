@@ -1,0 +1,179 @@
+{
+  "eks_cluster_endpoint": {
+    "sensitive": false,
+    "type": "string",
+    "value": "https://15F7E329640EBD1B5F2F81FA26EAAECD.gr7.us-east-1.eks.amazonaws.com"
+  },
+  "eks_cluster_name": {
+    "sensitive": false,
+    "type": "string",
+    "value": "payeye-dev-eks"
+  },
+  "eks_cluster_version": {
+    "sensitive": false,
+    "type": "string",
+    "value": "1.30"
+  },
+  "eks_kubeconfig_command": {
+    "sensitive": false,
+    "type": "string",
+    "value": "aws eks update-kubeconfig --region us-east-1 --name payeye-dev-eks --alias payeye-dev-eks"
+  },
+  "eks_node_group_names": {
+    "sensitive": false,
+    "type": [
+      "object",
+      {
+        "system": "string"
+      }
+    ],
+    "value": {
+      "system": "payeye-dev-system"
+    }
+  },
+  "eks_node_iam_role_arn": {
+    "sensitive": false,
+    "type": "string",
+    "value": "arn:aws:iam::339713122678:role/LabRole"
+  },
+  "gateway_vpc_endpoint_ids": {
+    "sensitive": false,
+    "type": [
+      "object",
+      {}
+    ],
+    "value": {}
+  },
+  "interface_vpc_endpoint_ids": {
+    "sensitive": false,
+    "type": [
+      "object",
+      {}
+    ],
+    "value": {}
+  },
+  "kms_key_aliases": {
+    "sensitive": false,
+    "type": [
+      "object",
+      {
+        "ebs": "string",
+        "logs": "string",
+        "rds": "string",
+        "secrets": "string"
+      }
+    ],
+    "value": {
+      "ebs": "alias/payeye-dev-ebs",
+      "logs": "alias/payeye-dev-logs",
+      "rds": "alias/payeye-dev-rds",
+      "secrets": "alias/payeye-dev-secrets"
+    }
+  },
+  "kms_key_arns": {
+    "sensitive": false,
+    "type": [
+      "object",
+      {
+        "ebs": "string",
+        "logs": "string",
+        "rds": "string",
+        "secrets": "string"
+      }
+    ],
+    "value": {
+      "ebs": "arn:aws:kms:us-east-1:339713122678:key/0ce8f6da-0d43-49c2-9409-49dd5e03eafc",
+      "logs": "arn:aws:kms:us-east-1:339713122678:key/f854b908-435b-430d-813b-9ca417ca53a1",
+      "rds": "arn:aws:kms:us-east-1:339713122678:key/15245ee6-5acd-4873-95a1-8a7891769f9a",
+      "secrets": "arn:aws:kms:us-east-1:339713122678:key/462d7f71-97df-4097-bdb4-4406a94e81be"
+    }
+  },
+  "managing_account_singletons": {
+    "sensitive": false,
+    "type": [
+      "object",
+      {
+        "default_ebs_encryption": "bool",
+        "iam_password_policy": "bool"
+      }
+    ],
+    "value": {
+      "default_ebs_encryption": false,
+      "iam_password_policy": false
+    }
+  },
+  "nat_gateway_public_ips": {
+    "sensitive": false,
+    "type": [
+      "tuple",
+      [
+        "string"
+      ]
+    ],
+    "value": [
+      "3.234.169.247"
+    ]
+  },
+  "private_app_subnet_ids": {
+    "sensitive": false,
+    "type": [
+      "tuple",
+      [
+        "string",
+        "string"
+      ]
+    ],
+    "value": [
+      "subnet-03488696b472e823b",
+      "subnet-09a130cfbba5b24a4"
+    ]
+  },
+  "private_db_subnet_ids": {
+    "sensitive": false,
+    "type": [
+      "tuple",
+      [
+        "string",
+        "string"
+      ]
+    ],
+    "value": [
+      "subnet-0fcdc44284ba0c142",
+      "subnet-0dadd541a25e0014b"
+    ]
+  },
+  "public_subnet_ids": {
+    "sensitive": false,
+    "type": [
+      "tuple",
+      [
+        "string",
+        "string"
+      ]
+    ],
+    "value": [
+      "subnet-072c1af9348e7df84",
+      "subnet-0cc97653bfb7d12d1"
+    ]
+  },
+  "vpc_cidr_block": {
+    "sensitive": false,
+    "type": "string",
+    "value": "10.0.0.0/16"
+  },
+  "vpc_id": {
+    "sensitive": false,
+    "type": "string",
+    "value": "vpc-0a63d576142785e9b"
+  },
+  "waf_log_group_name": {
+    "sensitive": false,
+    "type": "string",
+    "value": "aws-waf-logs-payeye-dev"
+  },
+  "waf_web_acl_arn": {
+    "sensitive": false,
+    "type": "string",
+    "value": "arn:aws:wafv2:us-east-1:339713122678:regional/webacl/payeye-dev-webacl/a9d0c5fd-740f-49b2-accb-52f09fabc08c"
+  }
+}

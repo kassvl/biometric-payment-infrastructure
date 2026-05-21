@@ -91,6 +91,12 @@ variable "flow_log_retention_days" {
   default     = 30
 }
 
+variable "enable_flow_logs" {
+  description = "If true, enable VPC Flow Logs to CloudWatch. Requires iam:CreateRole — set false in restricted environments (e.g., AWS Academy Learner Lab) where role creation is blocked."
+  type        = bool
+  default     = true
+}
+
 variable "waf_rate_limit_per_5min" {
   description = "WAF per-IP rate limit (block above this many requests in any 5-minute window). 10000 is generous for dev; tune lower for prod auth endpoints."
   type        = number

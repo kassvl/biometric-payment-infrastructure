@@ -12,36 +12,32 @@ locals {
   # KMS key catalog. Each entry defines what service principals are allowed
   # to use the key. Adding a new domain here is the single point of change
   # if a future module needs its own CMK.
+  #
+  # NOTE on service principals: AWS KMS rejects regional principal forms
+  # like 'logs.<region>.amazonaws.com' for some services. We use the
+  # region-agnostic principal name only and pair it with an
+  # 'aws:SourceAccount' condition to scope it to our account. This is what
+  # AWS itself documents in the CloudWatch Logs / EBS / RDS KMS examples.
   # ---------------------------------------------------------------------------
   kms_key_catalog = {
     logs = {
       description = "CMK for ${local.name_prefix} CloudWatch Logs encryption (VPC Flow Logs, EKS audit, WAF, app logs)."
-      services = [
-        "logs.${local.region}.amazonaws.com",
-        "logs.amazonaws.com",
-      ]
+      services    = ["logs.amazonaws.com"]
     }
 
     secrets = {
       description = "CMK for ${local.name_prefix} AWS Secrets Manager secrets (RDS master password, OIDC client secrets, app credentials)."
-      services = [
-        "secretsmanager.amazonaws.com",
-      ]
+      services    = ["secretsmanager.amazonaws.com"]
     }
 
     rds = {
       description = "CMK for ${local.name_prefix} Aurora PostgreSQL storage encryption and Performance Insights."
-      services = [
-        "rds.amazonaws.com",
-      ]
+      services    = ["rds.amazonaws.com"]
     }
 
     ebs = {
       description = "CMK for ${local.name_prefix} EBS volume encryption (EKS worker nodes, any future EC2)."
-      services = [
-        "ec2.${local.region}.amazonaws.com",
-        "ec2.amazonaws.com",
-      ]
+      services    = ["ec2.amazonaws.com"]
     }
   }
 

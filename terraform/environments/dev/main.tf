@@ -28,7 +28,7 @@ module "vpc" {
   enable_nat_gateway = true
   single_nat_gateway = var.single_nat_gateway
 
-  enable_flow_logs        = true
+  enable_flow_logs        = var.enable_flow_logs
   flow_log_traffic_type   = "ALL"
   flow_log_retention_days = var.flow_log_retention_days
 
@@ -113,8 +113,15 @@ module "eks" {
   # in dev (one less moving piece for the demo). For prod, create an
   # eks-secrets CMK in the security module and pass it here.
   cluster_encryption_kms_key_arn = null
-  node_disk_kms_key_arn          = module.security.kms_key_arns["ebs"]
-  cluster_log_kms_key_arn        = module.security.kms_key_arns["logs"]
+
+  # Lab compromise: EBS volumes encrypted with AWS-managed key, not our CMK.
+  # Reason: our 'ebs' CMK key policy needs an extra statement allowing
+  # kms:CreateGrant via aws:GrantIsForAWSResource for EC2 to attach
+  # encrypted EBS volumes. Cleanest fix is in the security module's KMS
+  # policy template; deferred to a follow-up commit. AWS-managed encryption
+  # is still encryption — just under a key whose policy we don't own.
+  node_disk_kms_key_arn   = null
+  cluster_log_kms_key_arn = module.security.kms_key_arns["logs"]
 
   cluster_log_retention_days = var.flow_log_retention_days
 

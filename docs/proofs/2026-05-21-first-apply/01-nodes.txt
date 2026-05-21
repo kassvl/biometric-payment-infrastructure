@@ -1,0 +1,4 @@
+=== kubectl get nodes ===
+NAME                          STATUS   ROLES    AGE     VERSION                INTERNAL-IP   EXTERNAL-IP   OS-IMAGE         KERNEL-VERSION                  CONTAINER-RUNTIME
+ip-10-0-10-132.ec2.internal   Ready    <none>   5m10s   v1.30.14-eks-ecaa3a6   10.0.10.132   <none>        Amazon Linux 2   5.10.245-245.983.amzn2.x86_64   containerd://1.7.29
+ip-10-0-11-166.ec2.internal   Ready    <none>   5m9s    v1.30.14-eks-ecaa3a6   10.0.11.166   <none>        Amazon Linux 2   5.10.245-245.983.amzn2.x86_64   containerd://1.7.29

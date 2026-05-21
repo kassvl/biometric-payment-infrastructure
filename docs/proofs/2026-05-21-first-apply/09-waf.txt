@@ -1,0 +1,19 @@
+=== WAF Web ACL ===
+---------------------------------------------------------
+|                       GetWebACL                       |
++--------------+----------------------------------------+
+|  Name        |  payeye-dev-webacl                     |
++--------------+----------------------------------------+
+||                    DefaultAction                    ||
+|+-----------------------------------------------------+|
+||                        Rules                        ||
+|+-----------------------------------------+-----------+|
+||                  Name                   | Priority  ||
+|+-----------------------------------------+-----------+|
+||  AWSManagedRulesAmazonIpReputationList  |  1        ||
+||  AWSManagedRulesAnonymousIpList         |  2        ||
+||  AWSManagedRulesCommonRuleSet           |  10       ||
+||  AWSManagedRulesKnownBadInputsRuleSet   |  11       ||
+||  AWSManagedRulesSQLiRuleSet             |  12       ||
+||  RateLimitPerSourceIp                   |  100      ||
+|+-----------------------------------------+-----------+|

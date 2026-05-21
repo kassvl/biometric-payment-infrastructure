@@ -40,7 +40,7 @@ resource "aws_wafv2_web_acl" "main" {
   count = var.enable_waf ? 1 : 0
 
   name        = "${local.name_prefix}-webacl"
-  description = "Regional WAF v2 WebACL for ${local.name_prefix} — managed rules + custom rate limit."
+  description = "Regional WAF v2 WebACL for ${local.name_prefix} - managed rules + custom rate limit."
   scope       = "REGIONAL"
 
   default_action {
