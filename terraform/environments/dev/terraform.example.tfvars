@@ -38,3 +38,34 @@
 #   OnCallTeam = "platform"
 #   CostCenter = "platform"
 # }
+
+# ----- EKS -----
+# cluster_version = "1.30"
+# cluster_endpoint_public_access_cidrs = ["0.0.0.0/0"]   # tighten in prod
+
+# Node groups: dev default is one small ON_DEMAND group (~$0.083/hour for 2 t3.medium).
+# To add a SPOT app group, uncomment and adjust:
+# node_groups = {
+#   system = {
+#     instance_types = ["t3.medium"]
+#     capacity_type  = "ON_DEMAND"
+#     ami_type       = "AL2_x86_64"
+#     disk_size_gib  = 30
+#     desired_size   = 2
+#     min_size       = 2
+#     max_size       = 4
+#     labels         = { "workload-class" = "system" }
+#     taints         = []
+#   }
+#   app = {
+#     instance_types = ["t3.large", "t3a.large"]
+#     capacity_type  = "SPOT"
+#     ami_type       = "AL2_x86_64"
+#     disk_size_gib  = 50
+#     desired_size   = 0
+#     min_size       = 0
+#     max_size       = 6
+#     labels         = { "workload-class" = "app" }
+#     taints         = []
+#   }
+# }

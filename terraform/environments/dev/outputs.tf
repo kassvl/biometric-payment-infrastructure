@@ -93,3 +93,42 @@ output "managing_account_singletons" {
     default_ebs_encryption = module.security.default_ebs_encryption_managed
   }
 }
+
+
+# -----------------------------------------------------------------------------
+# EKS
+# -----------------------------------------------------------------------------
+output "eks_cluster_name" {
+  description = "Name of the EKS cluster."
+  value       = module.eks.cluster_name
+}
+
+output "eks_cluster_endpoint" {
+  description = "Kubernetes API server URL."
+  value       = module.eks.cluster_endpoint
+}
+
+output "eks_cluster_version" {
+  description = "Kubernetes minor version (e.g. '1.30')."
+  value       = module.eks.cluster_version
+}
+
+output "eks_oidc_provider_arn" {
+  description = "ARN of the IAM OIDC provider used by IRSA. Reference this from any pod-IAM-role trust policy created by downstream modules."
+  value       = module.eks.oidc_provider_arn
+}
+
+output "eks_node_iam_role_arn" {
+  description = "ARN of the EC2 instance role used by every worker node."
+  value       = module.eks.node_iam_role_arn
+}
+
+output "eks_node_group_names" {
+  description = "Map of node-group key -> AWS-side node group name."
+  value       = module.eks.node_group_names
+}
+
+output "eks_kubeconfig_command" {
+  description = "Drop-in command to update local kubeconfig for kubectl access."
+  value       = module.eks.kubeconfig_command
+}

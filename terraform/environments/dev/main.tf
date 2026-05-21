@@ -81,3 +81,44 @@ module "security" {
 
   extra_tags = var.extra_tags
 }
+
+
+# =============================================================================
+# EKS module — depends on VPC for subnets and on security for KMS keys.
+#
+# In dev the cluster is small (one node group, 2x t3.medium ON_DEMAND).
+# Cluster secrets envelope encryption is OFF (etcd is still encrypted at the
+# storage layer with AWS-managed keys); turn it on in prod by passing a
+# dedicated cluster-secrets CMK. Node EBS volumes use the security module's
+# 'ebs' CMK; control-plane logs use the 'logs' CMK.
+# =============================================================================
+
+module "eks" {
+  source = "../../modules/eks"
+
+  project_name = var.project_name
+  env          = var.env
+
+  cluster_version = var.cluster_version
+
+  vpc_id                   = module.vpc.vpc_id
+  control_plane_subnet_ids = module.vpc.private_app_subnet_ids
+  node_subnet_ids          = module.vpc.private_app_subnet_ids
+
+  cluster_endpoint_private_access      = true
+  cluster_endpoint_public_access       = true
+  cluster_endpoint_public_access_cidrs = var.cluster_endpoint_public_access_cidrs
+
+  # Encryption wiring. Note: cluster_encryption_kms_key_arn intentionally null
+  # in dev (one less moving piece for the demo). For prod, create an
+  # eks-secrets CMK in the security module and pass it here.
+  cluster_encryption_kms_key_arn = null
+  node_disk_kms_key_arn          = module.security.kms_key_arns["ebs"]
+  cluster_log_kms_key_arn        = module.security.kms_key_arns["logs"]
+
+  cluster_log_retention_days = var.flow_log_retention_days
+
+  node_groups = var.node_groups
+
+  extra_tags = var.extra_tags
+}

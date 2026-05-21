@@ -28,6 +28,17 @@
                     |  - VPC endpoints (DISABLED) |
                     |  - IAM password policy      |
                     |  - EBS default encryption   |
+                    +-------------+---------------+
+                                  |
+                                  | kms_key_arns["ebs"], kms_key_arns["logs"]
+                                  v
+                    +-----------------------------+
+                    |  module "eks"               |
+                    |  - EKS 1.30 cluster         |
+                    |  - 1 node group (2x t3.med) |
+                    |  - IRSA OIDC provider       |
+                    |  - 4 addons (CNI, CoreDNS,  |
+                    |    kube-proxy, EBS CSI)     |
                     +-----------------------------+
 ```
 
@@ -48,24 +59,37 @@ terraform/environments/dev/
 
 Running this composition continuously costs roughly:
 
-| Component                         | Monthly | Comment                                   |
-| --------------------------------- | ------: | ----------------------------------------- |
-| 1 × NAT Gateway (single, dev)     | ~$32    | + per-GB processing if you generate egress |
-| 1 × Elastic IP (NAT-attached)     | $0      | Only unattached EIPs are charged           |
-| 4 × KMS CMK                       | ~$4     | $1/key/month + $0.03 per 10k API calls     |
-| 1 × WAF WebACL + 6 rules          | ~$11    | $5 base + $1/managed rule × 5 + $1/custom rule |
-| WAF requests                      | $0      | $0.60/million; nothing hits it without an ALB |
-| CloudWatch Logs (Flow Logs, WAF)  | ~$1–3   | A few GB/month at dev volume               |
-| **Idle total**                    | **~$48/month** |                                       |
+| Component                                  | Monthly | Comment                                          |
+| ------------------------------------------ | ------: | ------------------------------------------------ |
+| 1 × NAT Gateway (single, dev)              | ~$32    | + per-GB processing if you generate egress       |
+| 1 × Elastic IP (NAT-attached)              | $0      | Only unattached EIPs are charged                 |
+| 4 × KMS CMK                                | ~$4     | $1/key/month + $0.03 per 10k API calls           |
+| 1 × WAF WebACL + 6 rules                   | ~$11    | $5 base + $1/managed rule × 5 + $1/custom rule   |
+| WAF requests                               | $0      | Nothing hits it without an ALB                   |
+| EKS control plane                          | ~$73    | $0.10/hour, flat per cluster                     |
+| 2 × t3.medium ON_DEMAND (system group)     | ~$60    | $0.0416/hour × 2 — switch to SPOT to save ~50%   |
+| 2 × 30 GiB gp3 root volumes                | ~$5     | $0.08/GiB-month                                  |
+| CloudWatch Logs (Flow Logs, WAF, EKS)      | ~$2–5   | A few GB/month at idle                           |
+| **Idle total**                             | **~$190/month** | If left running.                          |
 
-**Tearing down between demo sessions saves the bulk of this.** A 4-hour demo
-costs ~$0.10 in NAT-hours plus minor KMS prorations. Set
-`enable_vpc_endpoints = false` (which is the default) and you save the
-~$144/month worth of interface endpoint ENIs entirely.
+**Tearing down between demo sessions saves the bulk of this.** A 4-hour
+demo with the cluster running costs roughly:
 
-If you want to drive the bill down further while keeping the controls visible:
-- Skip the NAT entirely by also setting `enable_nat_gateway = false` upstream.
-  Pods cannot egress, but the network shape is fully visible. Saves ~$32/month.
+| Component                                | 4-hour demo |
+| ---------------------------------------- | ----------: |
+| NAT Gateway                              | $0.18       |
+| EKS control plane                        | $0.40       |
+| 2 × t3.medium ON_DEMAND                  | $0.17       |
+| KMS, WAF, log ingest, EBS                | ~$0.20      |
+| **Total**                                | **~$1**     |
+
+50 USD AWS credit comfortably covers ~50 demo applies. The high-leverage
+move for keeping the bill low is `terraform destroy` after each session.
+
+If you want to drive the bill down further while keeping the cluster
+visible, switch the system node group to `SPOT` (cuts node cost ~50%)
+or set `desired_size = 1` on a single t3.small (cluster will fit but
+some addons may be Pending due to capacity).
 
 ---
 
@@ -128,11 +152,13 @@ re-derived per developer machine).
 terraform plan -out=plan.tfplan
 ```
 
-Expected resources on a fresh account: roughly **40 resources** — VPC + IGW +
+Expected resources on a fresh account: roughly **65 resources** — VPC + IGW +
 6 subnets + EIP + NAT + 5 route tables + 6 RT associations + Flow Log group +
 Flow Log IAM role + Flow Log resource + 4 KMS keys + 4 KMS aliases + WAF
 log group + WAF WebACL + WAF logging config + EBS default encryption
-toggle + IAM password policy.
+toggle + IAM password policy + EKS cluster + 3 IAM roles (cluster, node,
+EBS CSI IRSA) + ~9 IAM role policy attachments + OIDC provider + control
+plane log group + 1 launch template + 1 node group + 4 EKS addons.
 
 If the count is materially different, stop and read the plan output. Common
 deltas: forgot to set `enable_vpc_endpoints = false` (adds 22 resources),
@@ -145,7 +171,7 @@ or the bootstrap KMS key isn't found (your `versions.tf` references
 terraform apply plan.tfplan
 ```
 
-First apply takes 4–6 minutes — the NAT Gateway is the slow piece.
+First apply takes 15–20 minutes — the EKS cluster + node group is the slow piece (the cluster control plane alone is ~10 minutes).
 
 ### 5. Verify
 
@@ -166,6 +192,19 @@ aws wafv2 list-web-acls --scope REGIONAL \
 
 # Account password policy
 aws iam get-account-password-policy
+
+# EKS — wow demo
+$(terraform output -raw eks_kubeconfig_command)
+kubectl get nodes
+kubectl -n kube-system get pods
+kubectl -n kube-system describe sa ebs-csi-controller-sa | grep eks.amazonaws.com/role-arn
+
+# Verify IRSA flow from inside a pod
+kubectl run irsa-test \
+  --rm -it --restart=Never \
+  --image=public.ecr.aws/aws-cli/aws-cli:2.15.0 \
+  --serviceaccount=default \
+  -- sts get-caller-identity
 ```
 
 ### 6. Tear down (between demo sessions)
@@ -174,8 +213,10 @@ aws iam get-account-password-policy
 terraform destroy
 ```
 
-Clean teardown takes ~2 minutes. If it stalls on the NAT Gateway, that's
-normal — AWS waits for inflight connections to drain.
+Clean teardown takes ~10–15 minutes. The slow part is EKS node group drain
+(kubelet cordons and drains each node before EKS removes the EC2 instance).
+If the NAT Gateway destroy stalls, that's normal — AWS waits for inflight
+connections to drain.
 
 ---
 
@@ -204,11 +245,12 @@ policy or our CloudTrail trail under our key ARN.
 
 ## What this composition does NOT do (yet)
 
-- **No EKS, no RDS, no application workloads.** They land in subsequent
-  commits — first the EKS module, then RDS, then app deployments under
+- **No RDS, no application workloads.** They land in subsequent commits — first
+  the RDS module (Aurora PostgreSQL Multi-AZ), then app deployments under
   `kubernetes/`.
-- **No Argo CD or GitOps wiring.** That is a kubernetes-side concern; once
-  the cluster exists, Argo CD goes in `kubernetes/workloads/`.
+- **No `aws-load-balancer-controller`, no Argo CD, no GitOps wiring.** Those
+  are kubernetes-side concerns; once the cluster exists they go in
+  `kubernetes/workloads/` and `kubernetes/external-secrets/`.
 - **No GuardDuty / Security Hub / CloudTrail / AWS Config.** These are the
   account-baseline / threat-detection layer; they ship in a follow-up
   `infra(security): account-baseline` commit.

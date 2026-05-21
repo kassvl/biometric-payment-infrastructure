@@ -104,3 +104,51 @@ variable "extra_tags" {
     OnCallTeam = "platform"
   }
 }
+
+# -----------------------------------------------------------------------------
+# EKS
+# -----------------------------------------------------------------------------
+variable "cluster_version" {
+  description = "Kubernetes minor version for the EKS control plane."
+  type        = string
+  default     = "1.30"
+}
+
+variable "cluster_endpoint_public_access_cidrs" {
+  description = "CIDR blocks allowed to reach the EKS public API endpoint. 0.0.0.0/0 is fine for dev portfolio demos but tighten to operator + on-call ranges in prod."
+  type        = list(string)
+  default     = ["0.0.0.0/0"]
+}
+
+variable "node_groups" {
+  description = "Map of EKS managed node group definitions. Default ships ONE small ON_DEMAND group sized for a portfolio demo (~$0.083/hour for 2 t3.medium)."
+  type = map(object({
+    instance_types = list(string)
+    capacity_type  = string
+    ami_type       = string
+    disk_size_gib  = number
+    desired_size   = number
+    min_size       = number
+    max_size       = number
+    labels         = map(string)
+    taints = list(object({
+      key    = string
+      value  = string
+      effect = string
+    }))
+  }))
+
+  default = {
+    system = {
+      instance_types = ["t3.medium"]
+      capacity_type  = "ON_DEMAND"
+      ami_type       = "AL2_x86_64"
+      disk_size_gib  = 30
+      desired_size   = 2
+      min_size       = 2
+      max_size       = 4
+      labels         = { "workload-class" = "system" }
+      taints         = []
+    }
+  }
+}
