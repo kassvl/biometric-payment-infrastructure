@@ -1,4 +1,4 @@
-# PayEye Secure Biometric Payment Infrastructure
+# Secure Biometric Payment Infrastructure
 
 [![Terraform](https://img.shields.io/badge/IaC-Terraform_1.9-7B42BC?logo=terraform)](https://www.terraform.io/)
 [![AWS](https://img.shields.io/badge/Cloud-AWS_eu--central--1-FF9900?logo=amazonaws)](https://aws.amazon.com/)
