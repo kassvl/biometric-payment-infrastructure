@@ -1,0 +1,8 @@
+=== waypoint Gateway + Service ===
+NAME       CLASS            ADDRESS          PROGRAMMED   AGE
+waypoint   istio-waypoint   172.20.218.141   True         102s
+NAME                            READY   STATUS    RESTARTS   AGE
+pod/waypoint-589d746996-scrdw   1/1     Running   0          102s
+
+NAME               TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)               AGE
+service/waypoint   ClusterIP   172.20.218.141   <none>        15021/TCP,15008/TCP   103s

@@ -1,0 +1,46 @@
+# =============================================================================
+# L7 AuthorizationPolicy applied at the waypoint.
+#
+# This is the kind of rule that can ONLY be expressed at L7 (HTTP), and
+# therefore is enforced by the waypoint proxy — not by ztunnel.
+#
+# Example rule for a payments-style demo:
+#   - Only the productpage ServiceAccount can issue HTTP GET /productpage,
+#     /static, or /login on the productpage service.
+#   - Any HTTP method other than GET/HEAD is rejected.
+#   - Any path other than the explicit allowlist is rejected.
+#
+# When applied to the waypoint, the rule fires after ztunnel has terminated
+# mTLS and the waypoint can see the HTTP method, path, and source identity.
+# =============================================================================
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: productpage-l7
+  namespace: default
+spec:
+  # `targetRefs` binds this policy to a specific Gateway (the waypoint),
+  # so it is enforced at the L7 hop, not at every pod.
+  targetRefs:
+    - group: gateway.networking.k8s.io
+      kind: Gateway
+      name: waypoint
+  action: ALLOW
+  rules:
+    - from:
+        - source:
+            # Only mesh-internal traffic is allowed; external callers must
+            # come through the istio-ingressgateway (not configured in this
+            # ambient demo, but the rule is here for shape).
+            namespaces: ["default"]
+      to:
+        - operation:
+            methods: ["GET", "HEAD"]
+            paths:
+              - "/productpage"
+              - "/static/*"
+              - "/api/v1/products"
+              - "/api/v1/products/*"
+              - "/login"
+              - "/logout"
+              - "/health"

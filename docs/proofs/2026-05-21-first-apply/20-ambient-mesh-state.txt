@@ -1,0 +1,15 @@
+=== full mesh state (sidecar-less ambient) ===
+default         details-v1-6cd6d9df6b-h8mpq               1/1     Running   0          115s
+default         productpage-v1-57ffb6658c-6czbx           1/1     Running   0          112s
+default         ratings-v1-794744f5fd-4v8xr               1/1     Running   0          115s
+default         reviews-v1-67896867f4-ftz6f               1/1     Running   0          114s
+default         reviews-v2-86d5db4bd6-tcdm9               1/1     Running   0          114s
+default         reviews-v3-77947c4c78-8znsj               1/1     Running   0          113s
+default         traffic-gen-7dffd4cdd5-xb7n7              1/1     Running   0          73s
+default         waypoint-589d746996-scrdw                 1/1     Running   0          99s
+istio-system    istio-cni-node-bqzk5                      1/1     Running   0          2m24s
+istio-system    istio-cni-node-t8zn6                      1/1     Running   0          2m24s
+istio-system    istiod-78c79fd67c-c5zsb                   1/1     Running   0          2m35s
+istio-system    kiali-79788bfbcf-ltxqg                    1/1     Running   0          61s
+istio-system    ztunnel-799xg                             1/1     Running   0          2m17s
+istio-system    ztunnel-7rcps                             1/1     Running   0          2m17s

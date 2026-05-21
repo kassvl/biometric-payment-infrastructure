@@ -1,0 +1,75 @@
+# =============================================================================
+# Prometheus ServiceMonitors for the Istio Ambient mesh.
+#
+# Without these, kube-prometheus-stack does not know about Istio's metric
+# endpoints and Kiali's traffic graph stays empty even with traffic flowing.
+#
+# In ambient mode three components export metrics:
+#   - istiod   (control plane) — istiod:15014/metrics
+#   - ztunnel  (per-node L4 + mTLS) — port 15020/metrics
+#   - waypoint (per-namespace L7) — port 15020/metrics
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# istiod control plane metrics.
+# -----------------------------------------------------------------------------
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: istiod
+  namespace: istio-system
+  labels:
+    release: kps   # required so kube-prometheus-stack picks it up
+spec:
+  selector:
+    matchLabels:
+      app: istiod
+  endpoints:
+    - port: http-monitoring
+      interval: 30s
+      path: /metrics
+
+---
+# -----------------------------------------------------------------------------
+# ztunnel DaemonSet metrics. Per-node — Prometheus scrapes each Pod once.
+# We use a PodMonitor (not ServiceMonitor) because ztunnel does not have
+# a ClusterIP Service — it intercepts traffic via iptables, not via DNS.
+# -----------------------------------------------------------------------------
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: ztunnel
+  namespace: istio-system
+  labels:
+    release: kps
+spec:
+  selector:
+    matchLabels:
+      app: ztunnel
+  podMetricsEndpoints:
+    - targetPort: 15020
+      interval: 30s
+      path: /metrics
+
+---
+# -----------------------------------------------------------------------------
+# Waypoint proxy metrics — one PodMonitor that targets every waypoint pod
+# in any namespace (selectorLabel covers all Gateway-API-spawned waypoints).
+# -----------------------------------------------------------------------------
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: waypoint
+  namespace: istio-system
+  labels:
+    release: kps
+spec:
+  namespaceSelector:
+    any: true   # waypoint pods live in tenant namespaces, not istio-system
+  selector:
+    matchLabels:
+      gateway.istio.io/managed: istio.io-mesh-controller
+  podMetricsEndpoints:
+    - targetPort: 15020
+      interval: 30s
+      path: /metrics

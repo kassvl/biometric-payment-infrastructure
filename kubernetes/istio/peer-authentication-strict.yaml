@@ -1,0 +1,29 @@
+# =============================================================================
+# Mesh-wide STRICT mTLS PeerAuthentication.
+#
+# In ambient mode this policy is enforced by ztunnel (the per-node L4 proxy)
+# at the data-plane level, NOT by per-pod sidecars. Effect:
+#
+#   1. Every connection between two pods in any ambient-labeled namespace is
+#      automatically wrapped in mTLS using each pod's SPIFFE identity:
+#         spiffe://payeye.local/ns/<namespace>/sa/<serviceaccount>
+#
+#   2. Any plaintext (non-mTLS) traffic from outside the mesh into an
+#      ambient-labeled pod is refused.
+#
+#   3. Pod-to-pod identities are TLS-verified. AuthorizationPolicy can
+#      key on these identities (e.g., "only payments-api SA can call
+#      ratings-api" rather than "any IP can").
+#
+# This is the cluster's single most important security control after
+# IRSA: encrypt and authenticate everything between workloads, by default,
+# without any application code changes.
+# =============================================================================
+apiVersion: security.istio.io/v1
+kind: PeerAuthentication
+metadata:
+  name: default
+  namespace: istio-system   # the mesh root - applies to every namespace
+spec:
+  mtls:
+    mode: STRICT

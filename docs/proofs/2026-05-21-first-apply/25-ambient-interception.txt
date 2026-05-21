@@ -1,0 +1,31 @@
+=== verify ambient interception via istioctl ===
+NAMESPACE     POD NAME                                ADDRESS     NODE                        WAYPOINT PROTOCOL
+default       details-v1-6cd6d9df6b-h8mpq             10.0.10.117 ip-10-0-10-132.ec2.internal None     HBONE
+default       kubernetes                              10.0.10.4                               None     TCP
+default       kubernetes                              10.0.11.200                             None     TCP
+default       productpage-v1-57ffb6658c-6czbx         10.0.10.196 ip-10-0-10-132.ec2.internal None     HBONE
+default       ratings-v1-794744f5fd-4v8xr             10.0.10.246 ip-10-0-10-132.ec2.internal None     HBONE
+default       reviews-v1-67896867f4-ftz6f             10.0.10.126 ip-10-0-10-132.ec2.internal None     HBONE
+default       reviews-v2-86d5db4bd6-tcdm9             10.0.10.201 ip-10-0-10-132.ec2.internal None     HBONE
+default       reviews-v3-77947c4c78-8znsj             10.0.11.36  ip-10-0-11-166.ec2.internal None     HBONE
+default       traffic-gen-7dffd4cdd5-xb7n7            10.0.11.23  ip-10-0-11-166.ec2.internal None     HBONE
+default       waypoint-589d746996-scrdw               10.0.10.7   ip-10-0-10-132.ec2.internal None     TCP
+istio-system  istio-cni-node-bqzk5                    10.0.11.166 ip-10-0-11-166.ec2.internal None     TCP
+istio-system  istio-cni-node-t8zn6                    10.0.10.132 ip-10-0-10-132.ec2.internal None     TCP
+istio-system  istiod-78c79fd67c-c5zsb                 10.0.11.224 ip-10-0-11-166.ec2.internal None     TCP
+istio-system  kiali-79788bfbcf-ltxqg                  10.0.11.99  ip-10-0-11-166.ec2.internal None     TCP
+istio-system  ztunnel-799xg                           10.0.10.195 ip-10-0-10-132.ec2.internal None     TCP
+istio-system  ztunnel-7rcps                           10.0.11.78  ip-10-0-11-166.ec2.internal None     TCP
+kube-system   aws-node-9vj7m                          10.0.10.132 ip-10-0-10-132.ec2.internal None     TCP
+kube-system   aws-node-ptrbs                          10.0.11.166 ip-10-0-11-166.ec2.internal None     TCP
+kube-system   coredns-849f74687b-5gfh7                10.0.10.206 ip-10-0-10-132.ec2.internal None     TCP
+kube-system   coredns-849f74687b-xbplg                10.0.10.147 ip-10-0-10-132.ec2.internal None     TCP
+kube-system   ebs-csi-controller-7f757ccd95-nsrpp     10.0.11.240 ip-10-0-11-166.ec2.internal None     TCP
+kube-system   ebs-csi-controller-7f757ccd95-ttttc     10.0.10.189 ip-10-0-10-132.ec2.internal None     TCP
+kube-system   ebs-csi-node-brbnw                      10.0.11.198 ip-10-0-11-166.ec2.internal None     TCP
+kube-system   ebs-csi-node-j8wwr                      10.0.10.229 ip-10-0-10-132.ec2.internal None     TCP
+kube-system   eks-extension-metrics-api-tblcl         172.0.32.0                              None     TCP
+kube-system   kps-kubelet-pwmqr                       10.0.11.166                             None     TCP
+kube-system   kps-kubelet-pwmqr                       10.0.10.132                             None     TCP
+kube-system   kube-proxy-6f8wq                        10.0.11.166 ip-10-0-11-166.ec2.internal None     TCP
+kube-system   kube-proxy-t5658                        10.0.10.132 ip-10-0-10-132.ec2.internal None     TCP

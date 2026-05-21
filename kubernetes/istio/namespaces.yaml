@@ -1,0 +1,30 @@
+# =============================================================================
+# Namespace opt-in to Istio Ambient.
+#
+# The `istio.io/dataplane-mode: ambient` label is what tells istio-cni and
+# ztunnel to start intercepting traffic for pods in that namespace. A
+# namespace WITHOUT this label runs un-meshed (no mTLS, no AuthorizationPolicy
+# enforcement) — this is correct for system namespaces like kube-system
+# whose DaemonSets must reach the kubelet on hostNetwork.
+#
+# Apply order:
+#   1. Install ambient mesh (./install-ambient.sh)
+#   2. kubectl apply -f namespaces.yaml         (this file - opts namespaces in)
+#   3. Restart workloads in those namespaces so traffic gets intercepted.
+#
+# In a real PayEye deployment, the labels would be:
+#   - payments         (PCI-DSS scope, ambient + waypoint for L7 authz)
+#   - biometrics       (ambient + waypoint, talks to payments + KMS only)
+#   - auth             (ambient + waypoint, JWT issuer)
+#   - observability    (ambient, no waypoint - L4 metrics only)
+#   - platform-system  (off — operators that need raw network access)
+#   - istio-system     (off — managed automatically by istio-cni/ztunnel)
+# =============================================================================
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: default
+  labels:
+    istio.io/dataplane-mode: ambient
+    payeye.io/data-classification: confidential
+    payeye.io/owner: platform-team

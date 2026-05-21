@@ -1,0 +1,37 @@
+# =============================================================================
+# Waypoint Proxy for the 'default' namespace (Bookinfo demo).
+#
+# In ambient mode, ztunnel handles L4 + mTLS for every pod automatically.
+# A WAYPOINT is the optional L7 layer — needed when AuthorizationPolicy
+# matches HTTP methods/paths/headers/JWT claims, or when we want
+# request-level routing (header-based weighting, fault injection, etc.)
+#
+# The waypoint is provisioned via the Kubernetes Gateway API CRD:
+#   - Gateway resource of class "istio-waypoint" tells istiod to
+#     create a Waypoint Deployment + Service in the namespace.
+#   - Pods in the namespace then route their L7 traffic through the
+#     waypoint when calling each other (ztunnel still terminates mTLS).
+#
+# The waypoint receives:
+#   - Decrypted traffic from ztunnel (mTLS terminated by ztunnel)
+#   - L7 inspection happens in the waypoint
+#   - Re-encryption to the destination via ztunnel before leaving the node
+#
+# This 1-Gateway-per-namespace pattern is the recommended starting point.
+# Per-service waypoints are also supported for tighter scoping.
+# =============================================================================
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: waypoint
+  namespace: default
+  labels:
+    # The presence of this label on the Gateway tells istiod that this
+    # Gateway is intended to act as a waypoint proxy (not an ingress GW).
+    istio.io/waypoint-for: service
+spec:
+  gatewayClassName: istio-waypoint
+  listeners:
+    - name: mesh
+      port: 15008
+      protocol: HBONE

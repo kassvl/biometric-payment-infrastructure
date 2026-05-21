@@ -1,0 +1,3 @@
+=== PeerAuthentication STRICT applied ===
+NAMESPACE      NAME      MODE     AGE
+istio-system   default   STRICT   2m12s

@@ -1,0 +1,4 @@
+=== ztunnel daemonset confirmation (1 per node) ===
+NAME             DESIRED   CURRENT   READY   UP-TO-DATE   AVAILABLE   NODE SELECTOR            AGE
+istio-cni-node   2         2         2       2            2           kubernetes.io/os=linux   2m25s
+ztunnel          2         2         2       2            2           kubernetes.io/os=linux   2m18s
