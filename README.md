@@ -1,4 +1,4 @@
-#Secure Biometric Payment Infrastructure
+# PayEye Secure Biometric Payment Infrastructure
 
 [![Terraform](https://img.shields.io/badge/IaC-Terraform_1.9-7B42BC?logo=terraform)](https://www.terraform.io/)
 [![AWS](https://img.shields.io/badge/Cloud-AWS_eu--central--1-FF9900?logo=amazonaws)](https://aws.amazon.com/)
@@ -18,7 +18,7 @@
 
 ## 1. Why this project exists
 
- operates in a **regulated payment-processing space** (PSD2, PCI-DSS, GDPR,
+PayEye operates in a **regulated payment-processing space** (PSD2, PCI-DSS, GDPR,
 EU DORA). Running biometric and card-adjacent workloads requires:
 
 - Strong **network segmentation** so card-handling pods cannot reach the public internet directly
