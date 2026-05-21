@@ -31,7 +31,15 @@ resource "aws_eks_addon" "this" {
 
   # The aws-ebs-csi-driver addon expects an IRSA role; every other addon
   # in our default set runs without one.
-  service_account_role_arn = each.key == "aws-ebs-csi-driver" ? aws_iam_role.ebs_csi.arn : null
+  #
+  # When enable_ebs_csi_irsa is false (Lab mode), we pass null and the
+  # addon falls back to using the node IAM role for AWS API access — works
+  # as long as the node role has EBS permissions, which LabRole does.
+  service_account_role_arn = (
+    each.key == "aws-ebs-csi-driver" && var.enable_ebs_csi_irsa
+    ? aws_iam_role.ebs_csi[0].arn
+    : null
+  )
 
   # Addons must wait for at least one node to be Ready, otherwise the
   # CoreDNS deployment will sit in Pending and EKS will mark the addon as

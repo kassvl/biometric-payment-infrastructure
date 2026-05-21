@@ -120,5 +120,12 @@ module "eks" {
 
   node_groups = var.node_groups
 
+  # Restricted-IAM environment passthrough (default null/true = unrestricted
+  # account; set in learnerlab.tfvars for AWS Academy Learner Lab).
+  cluster_iam_role_arn      = var.eks_cluster_iam_role_arn
+  node_iam_role_arn         = var.eks_node_iam_role_arn
+  enable_irsa_oidc_provider = var.eks_enable_irsa_oidc_provider
+  enable_ebs_csi_irsa       = var.eks_enable_ebs_csi_irsa
+
   extra_tags = var.extra_tags
 }

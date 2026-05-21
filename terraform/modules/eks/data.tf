@@ -22,7 +22,12 @@ data "aws_region" "current" {}
 # (which uses this thumbprint) cannot be created in the same apply that
 # creates the cluster — Terraform plans correctly because of the implicit
 # dependency through the cluster output.
+#
+# count = 0 when var.enable_irsa_oidc_provider is false (e.g., AWS Academy
+# Learner Lab where iam:CreateOpenIDConnectProvider may be blocked).
 # -----------------------------------------------------------------------------
 data "tls_certificate" "oidc" {
+  count = var.enable_irsa_oidc_provider ? 1 : 0
+
   url = aws_eks_cluster.this.identity[0].oidc[0].issuer
 }

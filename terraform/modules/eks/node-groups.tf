@@ -100,7 +100,7 @@ resource "aws_eks_node_group" "this" {
 
   cluster_name    = aws_eks_cluster.this.name
   node_group_name = "${local.name_prefix}-${each.key}"
-  node_role_arn   = aws_iam_role.node.arn
+  node_role_arn   = local.effective_node_role_arn
   subnet_ids      = local.node_subnet_ids
 
   instance_types = each.value.instance_types
@@ -138,6 +138,9 @@ resource "aws_eks_node_group" "this" {
   }
 
   # Node role policy attachments must exist before the node group is created.
+  # When using a pre-existing role (Lab mode), the attachments are not
+  # created by this module — depends_on resolves to an empty list there,
+  # which is fine because the pre-existing role already has the policies.
   depends_on = [
     aws_iam_role_policy_attachment.node_worker,
     aws_iam_role_policy_attachment.node_ecr_readonly,

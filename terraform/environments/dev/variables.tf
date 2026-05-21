@@ -152,3 +152,33 @@ variable "node_groups" {
     }
   }
 }
+
+# -----------------------------------------------------------------------------
+# Learner Lab / restricted-IAM environment toggles
+#
+# Set these in a learnerlab.tfvars file (gitignored) when applying inside an
+# AWS Academy Learner Lab. Defaults are tuned for an unrestricted account.
+# -----------------------------------------------------------------------------
+variable "eks_cluster_iam_role_arn" {
+  description = "Pre-existing IAM role ARN to use as the EKS cluster role. Set to LabRole's ARN in AWS Academy Learner Lab. Null = module creates the role itself."
+  type        = string
+  default     = null
+}
+
+variable "eks_node_iam_role_arn" {
+  description = "Pre-existing IAM role ARN to use as the EKS node instance role. Set to LabRole's ARN in AWS Academy Learner Lab. Null = module creates the role itself."
+  type        = string
+  default     = null
+}
+
+variable "eks_enable_irsa_oidc_provider" {
+  description = "If true (default), create the IAM OIDC provider for IRSA. Set to false if your lab type blocks iam:CreateOpenIDConnectProvider."
+  type        = bool
+  default     = true
+}
+
+variable "eks_enable_ebs_csi_irsa" {
+  description = "If true (default), create a dedicated IRSA role for the aws-ebs-csi-driver. Set to false in Learner Lab — the addon falls back to the node IAM role (LabRole) for EBS access."
+  type        = bool
+  default     = true
+}

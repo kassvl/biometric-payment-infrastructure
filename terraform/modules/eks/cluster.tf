@@ -28,7 +28,7 @@ resource "aws_cloudwatch_log_group" "cluster" {
 # -----------------------------------------------------------------------------
 resource "aws_eks_cluster" "this" {
   name     = local.cluster_name
-  role_arn = aws_iam_role.cluster.arn
+  role_arn = local.effective_cluster_role_arn
   version  = var.cluster_version
 
   # Stream every requested control-plane log type to the log group above.
@@ -59,6 +59,11 @@ resource "aws_eks_cluster" "this" {
   # The cluster role policy attachments must exist before the cluster is
   # created — EKS validates the role at create time. Listing the dependency
   # is explicit so a future refactor cannot accidentally race.
+  #
+  # When using a pre-existing role (Lab mode), the policy attachments do
+  # not exist in this module — the dependency list is empty for those, but
+  # the cluster apply still works because the pre-existing role already has
+  # the required policies.
   depends_on = [
     aws_iam_role_policy_attachment.cluster_policy,
     aws_iam_role_policy_attachment.cluster_vpc_resource_controller,
@@ -74,16 +79,18 @@ resource "aws_eks_cluster" "this" {
 # -----------------------------------------------------------------------------
 # OIDC identity provider — the federation point for IRSA.
 #
-# Every IAM role intended to be assumed by a pod has a trust policy that
-# references this provider's ARN and conditions on the OIDC issuer's
-# subject and audience claims.
+# count = 0 when var.enable_irsa_oidc_provider is false (e.g., AWS Academy
+# Learner Lab where iam:CreateOpenIDConnectProvider may be blocked, or when
+# the operator does not need IRSA at all).
 # -----------------------------------------------------------------------------
 resource "aws_iam_openid_connect_provider" "eks" {
+  count = var.enable_irsa_oidc_provider ? 1 : 0
+
   url = aws_eks_cluster.this.identity[0].oidc[0].issuer
 
   client_id_list = ["sts.amazonaws.com"]
 
-  thumbprint_list = [data.tls_certificate.oidc.certificates[0].sha1_fingerprint]
+  thumbprint_list = [data.tls_certificate.oidc[0].certificates[0].sha1_fingerprint]
 
   tags = merge(local.common_tags, {
     Name = "${local.cluster_name}-oidc"

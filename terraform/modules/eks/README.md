@@ -132,6 +132,46 @@ draining and replacing nodes during node-group deletion.
 
 ---
 
+## Restricted-IAM environments (AWS Academy Learner Lab)
+
+The module is designed to run in environments where `iam:CreateRole`,
+`iam:CreateUser`, and `iam:CreateOpenIDConnectProvider` are blocked — most
+notably **AWS Academy Learner Lab** (which assumes you into a `voclabs`
+role and provides a single pre-attached `LabRole` with broad service
+permissions). Four flags control the IAM-creation behavior:
+
+| Flag                          | Default | Lab value                        | What it controls                                                                          |
+| ----------------------------- | ------- | -------------------------------- | ----------------------------------------------------------------------------------------- |
+| `cluster_iam_role_arn`        | `null`  | `arn:...:role/LabRole`           | If non-null, the cluster role is NOT created; the supplied ARN is used.                   |
+| `node_iam_role_arn`           | `null`  | `arn:...:role/LabRole`           | If non-null, the node role is NOT created; the supplied ARN is used.                      |
+| `enable_irsa_oidc_provider`   | `true`  | `true` (Lab usually permits this)| When false, the IAM OIDC provider is skipped — no IRSA at all.                            |
+| `enable_ebs_csi_irsa`         | `true`  | `false`                          | When false, the EBS CSI IRSA role is skipped; the addon uses the node IAM role for EBS.   |
+
+In Learner Lab, pass `LabRole`'s ARN to BOTH `cluster_iam_role_arn` and
+`node_iam_role_arn` (LabRole's trust policy already accepts both
+`eks.amazonaws.com` and `ec2.amazonaws.com`, and it has every required
+managed policy attached). Then disable `enable_ebs_csi_irsa` because
+the IRSA role we'd create requires `iam:CreateRole`. The OIDC provider
+itself is usually allowed (`iam:CreateOpenIDConnectProvider` is normally
+unblocked), so leave `enable_irsa_oidc_provider = true` unless your
+specific lab type fails — turn it off if it does.
+
+Lab caveats:
+
+- Region is typically restricted to `us-east-1`. Set `region = "us-east-1"`
+  at the env composition's provider block.
+- Credentials expire every ~4 hours. Refresh from the Vocareum portal's
+  "AWS Details" page when `terraform plan` starts returning 403s.
+- `aws_iam_account_password_policy` and `aws_ebs_default_kms_key` are
+  account-wide singletons and may also be blocked by the Lab's IAM scope.
+  Disable them in the security module via `enable_iam_password_policy =
+  false` and `enable_default_ebs_encryption = false`.
+
+A complete Learner Lab apply runbook lives in
+`terraform/environments/dev/README.md` under "Learner Lab apply".
+
+---
+
 ## Mülakatta Bu Soruyu Alırsan
 
 A 10-question drill on EKS provisioning and IRSA.

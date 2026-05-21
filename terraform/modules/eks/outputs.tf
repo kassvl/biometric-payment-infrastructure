@@ -46,17 +46,17 @@ output "cluster_log_group_name" {
 # OIDC / IRSA
 # -----------------------------------------------------------------------------
 output "oidc_provider_arn" {
-  description = "ARN of the IAM OpenID Connect provider for IRSA. Use as the Federated principal in pod-IAM-role trust policies."
-  value       = aws_iam_openid_connect_provider.eks.arn
+  description = "ARN of the IAM OpenID Connect provider for IRSA. Null when enable_irsa_oidc_provider=false."
+  value       = try(aws_iam_openid_connect_provider.eks[0].arn, null)
 }
 
 output "oidc_provider_url" {
-  description = "Full HTTPS URL of the OIDC issuer. The host portion (without 'https://') is what IAM trust conditions match against."
-  value       = aws_iam_openid_connect_provider.eks.url
+  description = "Full HTTPS URL of the OIDC issuer. Null when enable_irsa_oidc_provider=false."
+  value       = try(aws_iam_openid_connect_provider.eks[0].url, null)
 }
 
 output "oidc_issuer_host" {
-  description = "Hostname (without scheme) of the OIDC issuer. This is what IAM trust policy conditions reference (e.g. <host>:sub)."
+  description = "Hostname (without scheme) of the OIDC issuer. This is what IAM trust policy conditions reference (e.g. <host>:sub). Empty string when enable_irsa_oidc_provider=false."
   value       = local.oidc_issuer_host
 }
 
@@ -65,18 +65,18 @@ output "oidc_issuer_host" {
 # IAM
 # -----------------------------------------------------------------------------
 output "cluster_iam_role_arn" {
-  description = "ARN of the IAM role assumed by the EKS control plane."
-  value       = aws_iam_role.cluster.arn
+  description = "Effective ARN of the IAM role assumed by the EKS control plane. Either the role this module created or the pre-existing role passed via var.cluster_iam_role_arn."
+  value       = local.effective_cluster_role_arn
 }
 
 output "node_iam_role_arn" {
-  description = "ARN of the IAM role attached to worker node EC2 instances."
-  value       = aws_iam_role.node.arn
+  description = "Effective ARN of the IAM role attached to worker node EC2 instances. Either the role this module created or the pre-existing role passed via var.node_iam_role_arn."
+  value       = local.effective_node_role_arn
 }
 
 output "ebs_csi_irsa_role_arn" {
-  description = "ARN of the IRSA role assumed by the aws-ebs-csi-driver pod."
-  value       = aws_iam_role.ebs_csi.arn
+  description = "ARN of the IRSA role assumed by the aws-ebs-csi-driver pod. Null when enable_ebs_csi_irsa=false (the addon then uses the node IAM role for EBS access)."
+  value       = try(aws_iam_role.ebs_csi[0].arn, null)
 }
 
 

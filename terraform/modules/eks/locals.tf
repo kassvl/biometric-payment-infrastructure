@@ -18,9 +18,26 @@ locals {
   # in the same set of private subnets.
   node_subnet_ids = coalesce(var.node_subnet_ids, var.control_plane_subnet_ids)
 
+  # ---------------------------------------------------------------------------
+  # Effective IAM role ARNs.
+  #
+  # If the caller supplied a pre-existing role ARN (e.g., LabRole in AWS
+  # Academy Learner Lab), use it. Otherwise use the role this module created.
+  # The try() guards the count=0 case where the resource has no [0] element.
+  # ---------------------------------------------------------------------------
+  effective_cluster_role_arn = coalesce(
+    var.cluster_iam_role_arn,
+    try(aws_iam_role.cluster[0].arn, null),
+  )
+
+  effective_node_role_arn = coalesce(
+    var.node_iam_role_arn,
+    try(aws_iam_role.node[0].arn, null),
+  )
+
   # OIDC issuer URL → host (e.g. "oidc.eks.eu-central-1.amazonaws.com/id/ABC...")
   # is what IAM trust policies match against, NOT the full URL with scheme.
-  oidc_issuer_url  = aws_eks_cluster.this.identity[0].oidc[0].issuer
+  oidc_issuer_url  = try(aws_eks_cluster.this.identity[0].oidc[0].issuer, "")
   oidc_issuer_host = replace(local.oidc_issuer_url, "https://", "")
 
   common_tags = merge(

@@ -185,6 +185,47 @@ variable "node_groups" {
 }
 
 # -----------------------------------------------------------------------------
+# IAM — restricted-environment escape hatch
+#
+# By default the module creates its own cluster role, node role, and
+# EBS CSI IRSA role. In environments where iam:CreateRole is blocked
+# (e.g., AWS Academy Learner Lab, sandbox AWS Organizations with hardened
+# SCPs), supply pre-existing role ARNs and the module will skip role
+# creation and use them instead.
+#
+# Pre-existing roles MUST already trust the right service principal:
+#   - cluster_iam_role_arn must trust eks.amazonaws.com
+#   - node_iam_role_arn    must trust ec2.amazonaws.com
+#
+# AWS Academy Learner Lab provides a single 'LabRole' that already trusts
+# both, plus most AWS service principals — passing the LabRole ARN to BOTH
+# inputs is the canonical way to run this module in a Learner Lab.
+# -----------------------------------------------------------------------------
+variable "cluster_iam_role_arn" {
+  description = "Pre-existing IAM role ARN to use as the EKS cluster role. If null, the module creates one. Required pre-existing trust policy: eks.amazonaws.com. Required attached policy: AmazonEKSClusterPolicy (LabRole has it bundled)."
+  type        = string
+  default     = null
+}
+
+variable "node_iam_role_arn" {
+  description = "Pre-existing IAM role ARN to use as the EKS node instance role. If null, the module creates one. Required pre-existing trust policy: ec2.amazonaws.com. Required attached policies: AmazonEKSWorkerNodePolicy + AmazonEC2ContainerRegistryReadOnly + AmazonEKS_CNI_Policy (LabRole has them all)."
+  type        = string
+  default     = null
+}
+
+variable "enable_irsa_oidc_provider" {
+  description = "If true (default), create the IAM OpenID Connect provider for IRSA. Some restricted environments block iam:CreateOpenIDConnectProvider; setting this to false produces a working cluster without IRSA — pods then use the node IAM role for AWS access (legacy pattern, less secure but functional)."
+  type        = bool
+  default     = true
+}
+
+variable "enable_ebs_csi_irsa" {
+  description = "If true (default), create a dedicated IRSA role for the aws-ebs-csi-driver pod. Requires enable_irsa_oidc_provider=true AND iam:CreateRole permission. Set to false in restricted environments where iam:CreateRole is blocked — the addon will fall back to using the node IAM role for EBS API access, which works as long as the node role has AmazonEBSCSIDriverPolicy or equivalent permissions (LabRole does)."
+  type        = bool
+  default     = true
+}
+
+# -----------------------------------------------------------------------------
 # Addons (managed)
 #
 # Addon versions are intentionally NOT pinned in defaults. AWS maintains a

@@ -243,6 +243,132 @@ policy or our CloudTrail trail under our key ARN.
 
 ---
 
+## Learner Lab apply (AWS Academy)
+
+If you are running this from inside an AWS Academy Learner Lab session
+(your AWS identity comes from a `voclabs` assumed role, you have ~$50 of
+lab credit, region is locked to `us-east-1`), follow this runbook instead
+of the default first-time apply above.
+
+### Lab context
+
+- The lab provides a single pre-existing IAM role called **`LabRole`**.
+  Its trust policy already accepts most AWS service principals
+  (`eks.amazonaws.com`, `ec2.amazonaws.com`, etc.) and it has many AWS
+  managed policies attached, including all the EKS ones we need.
+- `iam:CreateUser`, `iam:CreateRole`, and `iam:AttachRolePolicy` are
+  generally **blocked** for the assumed `voclabs` role.
+- `iam:CreateOpenIDConnectProvider` is usually **allowed** — flip it off
+  later if your specific lab type rejects it.
+- Lab credentials expire every ~4 hours. When `terraform plan` starts
+  returning 403 on most calls, refresh from the Vocareum portal's
+  "AWS Details" → "Show" page and re-run `aws configure` (or update the
+  `[default]` block in `~/.aws/credentials`).
+
+### 1. Configure AWS CLI with Lab credentials
+
+In the Vocareum lab portal:
+
+1. Click **Start Lab** (the button turns green when ready).
+2. Click **AWS Details** → **AWS CLI** → **Show**.
+3. Copy the `[default]` block.
+
+In your terminal:
+
+```bash
+mkdir -p ~/.aws
+# Paste the [default] block (with aws_access_key_id, aws_secret_access_key,
+# and aws_session_token) into ~/.aws/credentials.
+
+# Then set the region:
+aws configure set region us-east-1
+
+# Verify
+aws sts get-caller-identity
+# Expect "assumed-role/voclabs/user...=Your_Name"
+```
+
+### 2. Look up the Lab account ID and confirm LabRole exists
+
+```bash
+aws sts get-caller-identity --query Account --output text
+# Note this number — you'll plug it into learnerlab.tfvars below.
+
+aws iam list-roles \
+  --query 'Roles[?starts_with(RoleName, `Lab`)].{Name:RoleName,Arn:Arn}' \
+  --output table
+# You should see at least one row named "LabRole".
+```
+
+### 3. Bootstrap the remote state
+
+The bootstrap module assumes it can create resources in any region. In
+Learner Lab, switch its region to `us-east-1` for this run:
+
+```bash
+cd terraform/bootstrap
+terraform init
+terraform apply -var "region=us-east-1"
+```
+
+Three to four minutes. State bucket is now `payeye-tfstate-<lab-account-id>`
+in `us-east-1`.
+
+### 4. Wire up the dev composition for the Lab
+
+```bash
+cd ../environments/dev
+
+# Copy the committed example to the gitignored real tfvars file.
+cp learnerlab.example.tfvars learnerlab.tfvars
+
+# Replace the placeholder account ID (339713122678) with YOUR Lab's ID
+# in BOTH eks_cluster_iam_role_arn and eks_node_iam_role_arn.
+ACCT=$(aws sts get-caller-identity --query Account --output text)
+sed -i.bak "s/339713122678/${ACCT}/g" learnerlab.tfvars
+rm learnerlab.tfvars.bak
+
+# The dev backend versions.tf hard-codes region eu-central-1 — override at init.
+terraform init -reconfigure \
+  -backend-config="bucket=payeye-tfstate-${ACCT}" \
+  -backend-config="region=us-east-1"
+```
+
+### 5. Plan + apply
+
+```bash
+terraform plan -var-file=learnerlab.tfvars -out=lab.tfplan
+# Review the plan. Expected: 60-65 resources but NO IAM role creates for
+# the cluster role, the node role, or the EBS CSI IRSA role (they're
+# either reused or skipped).
+
+terraform apply lab.tfplan
+# 15-20 minutes for the EKS cluster + node group.
+```
+
+### 6. Wow demo
+
+```bash
+$(terraform output -raw eks_kubeconfig_command)
+kubectl get nodes
+kubectl -n kube-system get pods
+```
+
+### 7. Tear down BEFORE the lab session ends
+
+The lab auto-stops after a few hours and you may lose the ability to
+destroy with the same credentials. Make a habit of:
+
+```bash
+terraform destroy -var-file=learnerlab.tfvars
+```
+
+10-15 minutes. Confirms cluster, node group, NAT, EIP, KMS keys, WAF, VPC
+gone. The S3 state bucket and DynamoDB lock table from `bootstrap/` survive
+across sessions — that is intentional.
+
+---
+
 ## What this composition does NOT do (yet)
 
 - **No RDS, no application workloads.** They land in subsequent commits — first
