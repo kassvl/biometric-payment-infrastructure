@@ -1,0 +1,4 @@
+=== persistent volumes (Prometheus + Loki) ===
+NAME                                                       STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   VOLUMEATTRIBUTESCLASS   AGE
+prometheus-kps-prometheus-db-prometheus-kps-prometheus-0   Bound    pvc-74258f53-d3f7-4409-8e86-0bfcece7d12a   5Gi        RWO            gp2            <unset>                 3m52s
+storage-loki-0                                             Bound    pvc-6a0e8bd0-962f-45c3-8370-8fcc34e9e580   2Gi        RWO            gp2            <unset>                 99s

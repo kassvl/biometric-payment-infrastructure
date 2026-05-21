@@ -1,0 +1,21 @@
+=== ALL pods cluster-wide ===
+NAMESPACE       NAME                                      READY   STATUS    RESTARTS   AGE     IP            NODE                          NOMINATED NODE   READINESS GATES
+kube-system     aws-node-9vj7m                            2/2     Running   0          15m     10.0.10.132   ip-10-0-10-132.ec2.internal   <none>           <none>
+kube-system     aws-node-ptrbs                            2/2     Running   0          15m     10.0.11.166   ip-10-0-11-166.ec2.internal   <none>           <none>
+kube-system     coredns-849f74687b-5gfh7                  1/1     Running   0          57m     10.0.10.206   ip-10-0-10-132.ec2.internal   <none>           <none>
+kube-system     coredns-849f74687b-xbplg                  1/1     Running   0          57m     10.0.10.147   ip-10-0-10-132.ec2.internal   <none>           <none>
+kube-system     ebs-csi-controller-7f757ccd95-nsrpp       6/6     Running   0          15m     10.0.11.240   ip-10-0-11-166.ec2.internal   <none>           <none>
+kube-system     ebs-csi-controller-7f757ccd95-ttttc       6/6     Running   0          15m     10.0.10.189   ip-10-0-10-132.ec2.internal   <none>           <none>
+kube-system     ebs-csi-node-brbnw                        3/3     Running   0          15m     10.0.11.198   ip-10-0-11-166.ec2.internal   <none>           <none>
+kube-system     ebs-csi-node-j8wwr                        3/3     Running   0          15m     10.0.10.229   ip-10-0-10-132.ec2.internal   <none>           <none>
+kube-system     kube-proxy-6f8wq                          1/1     Running   0          16m     10.0.11.166   ip-10-0-11-166.ec2.internal   <none>           <none>
+kube-system     kube-proxy-t5658                          1/1     Running   0          16m     10.0.10.132   ip-10-0-10-132.ec2.internal   <none>           <none>
+observability   kps-grafana-c45b5bbdf-v4gg6               3/3     Running   0          4m1s    10.0.11.23    ip-10-0-11-166.ec2.internal   <none>           <none>
+observability   kps-kube-state-metrics-64c4c6f5c8-7xjs2   1/1     Running   0          4m1s    10.0.11.169   ip-10-0-11-166.ec2.internal   <none>           <none>
+observability   kps-operator-579c848c47-dh9nn             1/1     Running   0          4m1s    10.0.11.18    ip-10-0-11-166.ec2.internal   <none>           <none>
+observability   kps-prometheus-node-exporter-2t4h8        1/1     Running   0          4m2s    10.0.10.132   ip-10-0-10-132.ec2.internal   <none>           <none>
+observability   kps-prometheus-node-exporter-7wdqp        1/1     Running   0          4m1s    10.0.11.166   ip-10-0-11-166.ec2.internal   <none>           <none>
+observability   loki-0                                    1/1     Running   0          100s    10.0.11.99    ip-10-0-11-166.ec2.internal   <none>           <none>
+observability   loki-promtail-hzbtn                       1/1     Running   0          101s    10.0.10.84    ip-10-0-10-132.ec2.internal   <none>           <none>
+observability   loki-promtail-nzr6v                       1/1     Running   0          101s    10.0.11.224   ip-10-0-11-166.ec2.internal   <none>           <none>
+observability   prometheus-kps-prometheus-0               2/2     Running   0          3m53s   10.0.10.130   ip-10-0-10-132.ec2.internal   <none>           <none>

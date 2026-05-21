@@ -1,0 +1,4 @@
+=== helm releases ===
+NAME	NAMESPACE    	REVISION	UPDATED                              	STATUS  	CHART                       	APP VERSION
+kps 	observability	1       	2026-05-21 16:21:56.193678 +0200 CEST	deployed	kube-prometheus-stack-85.2.0	v0.90.1    
+loki	observability	1       	2026-05-21 16:25:08.121684 +0200 CEST	deployed	loki-stack-2.10.3           	v2.9.3     

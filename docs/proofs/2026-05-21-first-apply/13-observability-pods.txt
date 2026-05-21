@@ -1,0 +1,11 @@
+=== all observability pods ===
+NAME                                      READY   STATUS    RESTARTS   AGE     IP            NODE                          NOMINATED NODE   READINESS GATES
+kps-grafana-c45b5bbdf-v4gg6               3/3     Running   0          3m56s   10.0.11.23    ip-10-0-11-166.ec2.internal   <none>           <none>
+kps-kube-state-metrics-64c4c6f5c8-7xjs2   1/1     Running   0          3m56s   10.0.11.169   ip-10-0-11-166.ec2.internal   <none>           <none>
+kps-operator-579c848c47-dh9nn             1/1     Running   0          3m56s   10.0.11.18    ip-10-0-11-166.ec2.internal   <none>           <none>
+kps-prometheus-node-exporter-2t4h8        1/1     Running   0          3m57s   10.0.10.132   ip-10-0-10-132.ec2.internal   <none>           <none>
+kps-prometheus-node-exporter-7wdqp        1/1     Running   0          3m56s   10.0.11.166   ip-10-0-11-166.ec2.internal   <none>           <none>
+loki-0                                    1/1     Running   0          95s     10.0.11.99    ip-10-0-11-166.ec2.internal   <none>           <none>
+loki-promtail-hzbtn                       1/1     Running   0          96s     10.0.10.84    ip-10-0-10-132.ec2.internal   <none>           <none>
+loki-promtail-nzr6v                       1/1     Running   0          96s     10.0.11.224   ip-10-0-11-166.ec2.internal   <none>           <none>
+prometheus-kps-prometheus-0               2/2     Running   0          3m48s   10.0.10.130   ip-10-0-10-132.ec2.internal   <none>           <none>

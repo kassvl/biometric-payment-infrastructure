@@ -1,0 +1,11 @@
+=== services (grafana etc) ===
+NAME                           TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)             AGE
+kps-grafana                    ClusterIP   172.20.156.94    <none>        80/TCP              4m
+kps-kube-state-metrics         ClusterIP   172.20.132.134   <none>        8080/TCP            4m
+kps-operator                   ClusterIP   172.20.173.10    <none>        443/TCP             4m
+kps-prometheus                 ClusterIP   172.20.148.67    <none>        9090/TCP,8080/TCP   4m
+kps-prometheus-node-exporter   ClusterIP   172.20.109.211   <none>        9100/TCP            4m
+loki                           ClusterIP   172.20.80.142    <none>        3100/TCP            99s
+loki-headless                  ClusterIP   None             <none>        3100/TCP            99s
+loki-memberlist                ClusterIP   None             <none>        7946/TCP            99s
+prometheus-operated            ClusterIP   None             <none>        9090/TCP            3m51s
