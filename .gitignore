@@ -8,9 +8,13 @@
 # Terraform — state, cache, and lock metadata
 # State files contain plaintext secrets (RDS passwords, ARNs, account IDs).
 # They MUST live in the encrypted S3 backend, never in Git.
+#
+# NOTE: `.terraform.lock.hcl` is NOT ignored. HashiCorp's official guidance is
+# to commit the lock file so every developer and every CI runner consumes the
+# same provider versions and the same provider checksums. Ignoring it would
+# allow silent provider drift between machines.
 # -----------------------------------------------------------------------------
 **/.terraform/
-**/.terraform.lock.hcl
 *.tfstate
 *.tfstate.*
 *.tfstate.backup
