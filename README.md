@@ -167,6 +167,36 @@ broken down by namespace, with per-namespace request / limit accounting.
 
 ---
 
+### 5.3. Reproducibility
+
+Anyone can stand up the same evidence locally. The full reproduction recipe:
+
+```bash
+# 1. Bring up the dev cluster (Kind for local; replace with EKS for cloud)
+make cluster        # provisions kind cluster + Istio Ambient + observability
+
+# 2. Apply Terraform modules (dev environment)
+cd terraform/environments/dev
+terraform init
+terraform plan -out=tfplan
+terraform apply tfplan
+
+# 3. Verify the mesh
+kubectl get pods -A                          # all namespaces healthy
+istioctl x authz check                       # mTLS posture per workload
+kubectl logs -n istio-system -l app=ztunnel  # ztunnel data plane
+
+# 4. Open dashboards
+make port-forward-kiali     # http://localhost:20001
+make port-forward-grafana   # http://localhost:3000
+```
+
+<!-- ASCIINEMA: replace this comment with the cast embed once recorded
+     [![asciicast](https://asciinema.org/a/<ID>.svg)](https://asciinema.org/a/<ID>)
+-->
+
+---
+
 ## 6. Security & compliance
 
 This repository is designed with the following frameworks in mind. Every module
