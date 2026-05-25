@@ -132,7 +132,42 @@ biopay-infra/
 
 ---
 
-## 5. Security & compliance
+## 5. Demo (verified)
+
+The Istio Ambient mesh and observability stack are wired up and running. These are
+real screenshots from the development cluster:
+
+### 5.1. Service mesh — Kiali Traffic Graph
+
+![Kiali Traffic Graph](docs/screenshots/kiali-traffic-graph.png)
+
+Kiali surfacing the live east–west traffic between application services. Lock
+icons mark mTLS-encrypted edges (default-deny + PeerAuthentication
+strict). The waypoint proxy is visible alongside the data plane, which is the
+Istio Ambient pattern (sidecar-less mTLS via ztunnel + waypoint).
+
+- **Namespace:** `default`
+- **Services:** 6 — `productpage`, `details`, `reviews`, `ratings`, `traffic-gen`, `kubernetes`
+- **Workloads:** 1 (waypoint proxy)
+- **Edges:** 4 mTLS-encrypted application edges + traffic-gen → productpage
+
+### 5.2. Cluster compute — Grafana Kubernetes Dashboard
+
+![Grafana Cluster Compute](docs/screenshots/grafana-cluster-dashboard.png)
+
+Grafana — *Kubernetes / Compute Resources / Cluster* — fed by Prometheus inside
+the `observability` namespace. CPU and memory headroom at the cluster level,
+broken down by namespace, with per-namespace request / limit accounting.
+
+- **CPU utilisation:** 3.33%
+- **CPU requests committed:** 24.7%
+- **Memory utilisation:** 26.9%
+- **Memory limits committed:** 80.4%
+- **Active namespaces:** `kube-system`, `observability`
+
+---
+
+## 6. Security & compliance
 
 This repository is designed with the following frameworks in mind. Every module
 ships with controls mapped to a control objective; see each module's README for
@@ -157,7 +192,7 @@ a Security review approval.
 
 ---
 
-## 6. Getting started
+## 7. Getting started
 
 > Modules deploy in dependency order: `bootstrap → vpc → security → eks → rds → observability → dns-tls`.
 
@@ -183,7 +218,7 @@ terraform plan
 
 ---
 
-## 7. License
+## 8. License
 
 This is a **portfolio / educational project** by [@kassvl](https://github.com/kassvl).
 The repo models the kind of AWS infrastructure a regulated FinTech with biometric
@@ -195,7 +230,7 @@ Released under the [MIT License](LICENSE) for the code and architectural ideas.
 
 ---
 
-## 8. Maintainer
+## 9. Maintainer
 
 [@kassvl](https://github.com/kassvl) — DevOps / Cloud engineering portfolio,
 aimed at the Wrocław / Polish FinTech market.
