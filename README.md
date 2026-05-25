@@ -97,7 +97,7 @@ This repository is the codified version of those requirements.
 
 ---
 
-## 4. Repository layout (target)
+## 4. Repository layout
 
 ```
 biopay-infra/
@@ -159,8 +159,7 @@ a Security review approval.
 
 ## 6. Getting started
 
-> The repository is bootstrapping. Modules ship in dependency order:
-> `bootstrap → vpc → security → eks → rds → observability → dns-tls`.
+> Modules deploy in dependency order: `bootstrap → vpc → security → eks → rds → observability → dns-tls`.
 
 ```bash
 # Clone
